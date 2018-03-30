@@ -82,8 +82,8 @@ dev.off()
 mapdata <- prepare_data_for_worldmap(global_logdata)
 m <- plotWorldmap(mapdata)
 #m
-#mapshot(m, file = "map.png")
-#plot(m)
+mapshot(m, file = "map.png")
+plot(m)
 ```
 
 \clearpage
