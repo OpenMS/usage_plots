@@ -3,7 +3,7 @@ title: "OpenMS Usage Statistics"
 author: "Svenja Mehringer"
 date: "24 April 2017"
 output:
-  pdf_document
+  html_document
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
