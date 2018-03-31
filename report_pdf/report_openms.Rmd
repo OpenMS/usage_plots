@@ -78,10 +78,10 @@ dev.off()
 ## OpenMS Worldmap 
 
 ```{r}
-#library(mapview)
+library(mapview)
 mapdata <- prepare_data_for_worldmap(global_logdata)
 m <- plotWorldmap(mapdata)
-#m
+m
 mapshot(m, file = "map.png")
 plot(m)
 ```
