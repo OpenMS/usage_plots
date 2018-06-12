@@ -5,19 +5,15 @@ set -e
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ $# -ne 1 ]; then
-    echo "[USER ERROR] provide file name of zipped log files."
+    echo "[USER ERROR] provide file name of concatenated log files."
     exit 1
 fi
 
-ZIP_FILE=$1
-RAW_DATA_FILE="all.log.raw"
+RAW_DATA_FILE=$1
 DATA_FILE="all.log"
 IP_FILE="ips.txt"
 GEO_FILE="geolocations.csv"
 
-# unzip file into all.log
-echo "--- Unzipping file and parsing into text file."
-unzip -p $ZIP_FILE | cat > $RAW_DATA_FILE 
 echo "--- $(wc -l $RAW_DATA_FILE) lines to process."
 
 # filter out valuable information
