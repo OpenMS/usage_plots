@@ -10,7 +10,6 @@
 # --------------------
 # The log files are originally not in a nice format to process.
 # Therefore, you need to use the script process_seqan_log_files.sh or process_openms_log_files.sh or first.
-#
 
 /path/to/script/process_seqan_log_files.sh seqan.zip
 

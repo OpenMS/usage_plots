@@ -14,7 +14,13 @@ DATA_FILE="all.log"
 IP_FILE="ips.txt"
 GEO_FILE="geolocations.csv"
 
-echo "--- $(wc -l $RAW_DATA_FILE) lines to process."
+LINES=$(wc -l $RAW_DATA_FILE)
+if [[ $LINES -eq 0 ]]; then
+	echo "XXX No lines to process."
+	exit 1
+fi
+
+echo "--- Lines to process: $LINES."
 
 # filter out valuable information
 # ouput file will have the following structre:
