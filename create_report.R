@@ -76,12 +76,12 @@ message("")
 message(paste("--- Render file ", args[3]))
 rmarkdown::render(paste(script.basename, 'report.Rmd', sep='/'))
 
-if (file.copy(paste(script.basename, "report.pdf", sep="/"), output_filename))
+if (file.copy(paste(script.basename, "report.html", sep="/"), output_filename))
 {
     message("=============================================================================")
     message(paste("SUCCESS: output file", output_filename, "generated"))
     message("=============================================================================")
-    file.remove(paste(script.basename, "report.pdf", sep="/"))
+    file.remove(paste(script.basename, "report.html", sep="/"))
 } else {
     message("=============================================================================")
     message(paste("FAILURE: could not generate output file", output_filename))

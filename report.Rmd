@@ -2,7 +2,7 @@
 title: "SeqAn Usage Statistics"
 author: "Svenja Mehringer"
 output:
-  pdf_document
+  html_document
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
