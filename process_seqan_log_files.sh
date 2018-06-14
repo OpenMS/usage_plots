@@ -15,7 +15,7 @@ IP_FILE="ips.txt"
 GEO_FILE="geolocations.csv"
 
 LINES=$(wc -l $RAW_DATA_FILE)
-if [[ $LINES -eq 0 ]]; then
+if [[ "$LINES" -eq "0" ]]; then
 	echo "XXX No lines to process."
 	exit 1
 fi
@@ -54,7 +54,7 @@ echo "ip,country_code,country,state_code,state,city,zipcode,area,latitude,longit
 COUNT=1
 for ip_add in $(cat $IP_FILE)
 do
-	echo -ne "$COUNT of $ips_to_locate\r"
+	#echo -ne "$COUNT of $ips_to_locate\r"
 	curl -s https://www.freegeoip.net/csv/$ip_add >> $GEO_FILE
 	COUNT=$((COUNT+1))
 done
