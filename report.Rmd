@@ -98,7 +98,7 @@ mapdata <- prepare_data_for_worldmap(global_logdata)
 m <- plotWorldmap(mapdata)
 m
 #mapshot(m, file = "map.png")
-plot(m)
+#plot(m)
 ```
 
 \clearpage
