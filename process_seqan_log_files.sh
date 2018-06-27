@@ -14,7 +14,7 @@ DATA_FILE="all.log"
 IP_FILE="ips.txt"
 GEO_FILE="geolocations.csv"
 
-LINES=$(wc -l $RAW_DATA_FILE)
+LINES=$(wc -l < $RAW_DATA_FILE)
 if [[ "$LINES" -eq "0" ]]; then
 	echo "XXX No lines to process."
 	exit 1
