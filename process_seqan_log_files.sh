@@ -61,5 +61,6 @@ do
 	COUNT=$((COUNT+1))
 done
 
+echo "--- tracked $(wc -l geolocations.csv) geolocations."
 echo "--- Done."
 

@@ -40,9 +40,21 @@ log_data_new <- read.table(log_file_name, sep = "\t",
                            fill = T, header = T, quote = "",
                            stringsAsFactors = F)
 
+if (nrow(log_data_new)==0)
+{
+    print(paste("[ERROR - global.R]: Cannot work on empty log data file (file name:",log_file_name,")"));
+    stop();
+}
+
 geolocations <- read.table(geo_loc_file_name, sep = ",",
                            fill = T, header = T, quote = "",
                            stringsAsFactors = F)
+
+if (nrow(geolocations)==0)
+{
+    print(paste("[ERROR - global.R]: Cannot work on empty geolocations file (file name:",geo_loc_file_name,")"));
+    stop();
+}
 
 global_logdata <- merge(log_data_new, geolocations, by="ip")
 
