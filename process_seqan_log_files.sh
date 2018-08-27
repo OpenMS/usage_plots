@@ -46,9 +46,11 @@ gawk '!/test_version_check/ && !/134.2.9.116/ && !/160.45.111.134/ && !/160.45.1
 
 
 # get geolocation geolocation
-head -n -1 | cut -f 3 $DATA_FILE | sort | uniq > $IP_FILE
+echo "--- Writing unique ip adresses into $IP_FILE"
+head -n -1 $DATA_FILE | cut -f 3 | sort | uniq > $IP_FILE
 
 ips_to_locate=$(wc -l $IP_FILE)
+
 echo "--- Getting Geo location from www.freegeoip.net for $ips_to_locate uniq ip adresses."
 echo "ip,country_code,country,state_code,state,city,zipcode,area,latitude,longitude,metro_code" > $GEO_FILE
 COUNT=1
