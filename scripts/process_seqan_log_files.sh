@@ -9,11 +9,15 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+INTERMEDIATE_OUTPUT_DIR="intermediate_ouput"
+
+mkdir $INTERMEDIATE_OUTPUT_DIR
+
 RAW_DATA_FILE=$1
-DATA_FILE="all.log"
-IP_FILE="ips.txt"
-GEO_FILE="geolocations.csv"
-DATABASE="IP2LOCATION-LITE-DB5.BIN"
+DATA_FILE="$INTERMEDIATE_OUTPUT_DIR/all.log"
+IP_FILE="$INTERMEDIATE_OUTPUT_DIR/ips.txt"
+GEO_FILE="$INTERMEDIATE_OUTPUT_DIR/geolocations.csv"
+DATABASE="database/IP2LOCATION-LITE-DB5.BIN"
 
 LINES=$(wc -l < $RAW_DATA_FILE)
 if [[ "$LINES" -eq "0" ]]; then
@@ -54,8 +58,8 @@ ips_to_locate=$(wc -l $IP_FILE)
 
 echo "--- Getting Geo location from local data base for $ips_to_locate uniq ip adresses."
 
-python get_ip_adresses.py $IP_FILE $GEO_FILE $DATABASE
+python $EXEC_DIR/get_ip_adresses.py $IP_FILE $GEO_FILE $DATABASE
 
-echo "--- tracked $(wc -l geolocations.csv) geolocations."
-echo "--- Done."
+echo "--- tracked $(wc -l $GEO_FILE) geolocations."
+echo "--- Done. Intermediate output files are in $INTERMEDIATE_OUTPUT_DIR/"
 

@@ -81,7 +81,7 @@ polygon(c(plot_data[,1], rev(plot_data[,1])),
         c(rep(0, nrow(plot_data)), rev(cumsum(plot_data[,2]))),
         col='lightblue')
 
-dev.copy(png, paste(output_figure_dir, "/total_cumulative_sum_of_usages_",
+dev.copy(png, paste(output_dir, "/total_cumulative_sum_of_usages_",
                      MAX_DATE, ".png", sep = ""))
 dev.off()
 ```
@@ -95,6 +95,73 @@ m <- plotWorldmap(mapdata)
 m
 #mapshot(m, file = "map.png")
 #plot(m)
+```
+
+\clearpage
+
+## Top 10 Applications
+
+In the following the data was aggregated by application. The first figure pictures the sum of all calls of each application, while the second shows the number of unique users. The figures differentiate between individual and cluster calls/users. The term 'cluster calls/users' refers to IP addresses that were previously identified as part of a cluster, but left in the dataset as a representative for the corresponding cluster.
+
+\vspace{20pt}
+
+```{r top_10_calls, fig.height=3.3,results='hide'}
+
+par(mar = c(4, 10, 2, 2), cex=0.7)
+barPlot.Top10Apps.calls(global_logdata, TRUE)
+dev.copy(png, paste(output_dir, "/top10_applications_by_calls_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\vspace{20pt}
+
+```{r top_10_users, fig.height=3.3, results='hide'}
+par(mar = c(4, 10, 2, 2), cex=0.7)
+barPlot.Top10Apps.users(global_logdata, TRUE)
+dev.copy(png, paste(output_dir, "/top10_applications_by_users_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\clearpage
+
+## Operating System
+
+For an overview over the distribution of different operating systems the data was aggregated by column 'os'. As before, the first figure pictures the sum of all calls of each operating system, while the second shows the number of unique users.
+
+\vspace{20pt}
+
+```{r operating_system, results='hide'}
+par(mfrow=c(1,2),cex=0.7)
+pieChart.OS.calls(global_logdata)
+pieChart.OS.users(global_logdata)
+
+dev.copy(png,  paste(output_dir, "/operating_system_distribution_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\pagebreak
+
+## Unique User Statistic
+
+The bar plots on the left display the unique new users. New Unique users means that each IP Adress tracked only appears once in this statistic at the time point of it's first occurence. The line plot on the right displays the same information as a line instead of bars. The red line on the left plot shows the cumulative sum of the new unique users.
+
+```{r unique_ips, echo=F, fig.height=4, results='hide'}
+new_unique_ips_per_month()
+dev.copy(png,  paste(output_dir, "/unique_new_users_per_month_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+For comparison  the following plots show the toal counts of usages (calls) per month, accumulated and as a line plot.
+
+```{r total_ips, echo=F, fig.height=4, results='hide'}
+total_ips_per_month()
+dev.copy(png,  paste(output_dir, "/total_calls_per_month_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
 ```
 
 \clearpage
@@ -125,7 +192,7 @@ colnames(t) <- c("#Countries", "Country with most calls",
                  "#Cities", "City with most calls")
 
 write.table(t, sep = "\t",
-            file = paste(output_figure_dir, "/Country_and_city_distribution_per_app_",
+            file = paste(output_dir, "/Country_and_city_distribution_per_app_",
                          MAX_DATE, ".tsv", sep = ""))
 
 knitr::kable(t)
@@ -151,75 +218,8 @@ avg_calls <- cbind(avg_calls,
 colnames(avg_calls) <- c("Total Sum", "Average per Day", "Average per Week")
 
 write.table(t, sep = "\t",
-            file = paste(output_figure_dir, "/Daily_and_weekly_usage_per_app_",
+            file = paste(output_dir, "/Daily_and_weekly_usage_per_app_",
                          MAX_DATE, ".tsv", sep = ""))
 
 knitr::kable(avg_calls)
-```
-
-\clearpage
-
-## Top 10 Applications
-
-In the following the data was aggregated by application. The first figure pictures the sum of all calls of each application, while the second shows the number of unique users. The figures differentiate between individual and cluster calls/users. The term 'cluster calls/users' refers to IP addresses that were previously identified as part of a cluster, but left in the dataset as a representative for the corresponding cluster.
-
-\vspace{20pt}
-
-```{r top_10_calls, fig.height=3.3,results='hide'}
-
-par(mar = c(4, 10, 2, 2), cex=0.7)
-barPlot.Top10Apps.calls(global_logdata, TRUE)
-dev.copy(png, paste(output_figure_dir, "/top10_applications_by_calls_",
-                     MAX_DATE, ".png", sep = ""))
-dev.off()
-```
-
-\vspace{20pt}
-
-```{r top_10_users, fig.height=3.3, results='hide'}
-par(mar = c(4, 10, 2, 2), cex=0.7)
-barPlot.Top10Apps.users(global_logdata, TRUE)
-dev.copy(png, paste(output_figure_dir, "/top10_applications_by_users_",
-                     MAX_DATE, ".png", sep = ""))
-dev.off()
-```
-
-\clearpage
-
-## Operating System
-
-For an overview over the distribution of different operating systems the data was aggregated by column 'os'. As before, the first figure pictures the sum of all calls of each operating system, while the second shows the number of unique users.
-
-\vspace{20pt}
-
-```{r operating_system, results='hide'}
-par(mfrow=c(1,2),cex=0.7)
-pieChart.OS.calls(global_logdata)
-pieChart.OS.users(global_logdata)
-
-dev.copy(png,  paste(output_figure_dir, "/operating_system_distribution_",
-                     MAX_DATE, ".png", sep = ""))
-dev.off()
-```
-
-\pagebreak
-
-## Unique User Statistic
-
-The bar plots on the left display the unique new users. New Unique users means that each IP Adress tracked only appears once in this statistic at the time point of it's first occurence. The line plot on the right displays the same information as a line instead of bars. The red line on the left plot shows the cumulative sum of the new unique users.
-
-```{r unique_ips, echo=F, fig.height=4, results='hide'}
-new_unique_ips_per_month()
-dev.copy(png,  paste(output_figure_dir, "/unique_new_users_per_month_",
-                     MAX_DATE, ".png", sep = ""))
-dev.off()
-```
-
-For comparison  the following plots show the toal counts of usages (calls) per month, accumulated and as a line plot.
-
-```{r total_ips, echo=F, fig.height=4, results='hide'}
-total_ips_per_month()
-dev.copy(png,  paste(output_figure_dir, "/total_calls_per_month_",
-                     MAX_DATE, ".png", sep = ""))
-dev.off()
 ```

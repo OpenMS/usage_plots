@@ -3,6 +3,7 @@ import sys
 import re
 
 sys.path.insert(0, './IP2Location-Python/') # add submodule package locally
+sys.path.insert(0, './scripts/IP2Location-Python/') # add submodule package locally
 
 import IP2Location
 
@@ -39,7 +40,7 @@ geo_locations_file.write("\n")
 for ip in ips_file:
 	# test if ip is a valid string to avoid errors
 	if not (re.search(ip_pattern, ip.strip())):
-		print "get_ip_adress.py # Error: Skipping non-valid ip adress:",ip.strip()
+		print "--- get_ip_adress.py # Error: Skipping non-valid ip adress:",ip.strip()
 		continue
 
 	geo_locations_file.write(ip.strip()) # write before database access for debug information
@@ -64,4 +65,4 @@ for ip in ips_file:
 ips_file.close()
 geo_locations_file.close()
 
-print "get_ip_adress.py # Done."
+print "--- get_ip_adress.py # Done."

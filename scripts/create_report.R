@@ -6,18 +6,25 @@ script.basename <- dirname(sub("--file=", "", initial.options[grep("--file=", in
 args = commandArgs(trailingOnly=TRUE)
 
 if (length(args) != 3) {
-  stop("USAGE ERROR: LOG_FILE GEOLOCATIONS OUT_FILE.pdf\nNote: You obtain the log file and geolocations file by executing ./process_seqan/openms.sh in the directory of the original log files.If you encounter any problems write a mail to svenja.mehringer@fu-berlin.de", call.=FALSE)
+  stop("USAGE ERROR: LOG_FILE GEOLOCATIONS OUT_DIR\nNote: You obtain the log file and geolocations file by executing ./process_seqan/openms.sh in the directory of the original log files. If you encounter any problems write a mail to svenja.mehringer@fu-berlin.de", call.=FALSE)
 }
 
-output_filename=args[3]
-output_figure_dir=paste(getwd(), "/", sub("^([^.]*).*", "\\1", basename(output_filename)), "_figures", sep='')
+output_dir=args[3]
+
+if (!(output_dir[1] == "/")) # relative path
+{
+	output_dir = paste(getwd(), output_dir, sep = "/")
+}
+
+dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+
+output_filename=paste(output_dir, "report.html", sep = "/")
 
 if (file.exists(output_filename))
 {
     stop(paste("[ERROR] Output file ", output_filename, "already exists."))
 }
 
-dir.create(output_figure_dir, showWarnings = FALSE, recursive = TRUE)
 local.lib <- "/tmp/R-lib/"
 dir.create(local.lib, showWarnings = FALSE, recursive = TRUE)
 .libPaths( c( .libPaths(), local.lib) )
