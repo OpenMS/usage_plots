@@ -11,7 +11,7 @@
 # The log files are originally not in a nice format to process.
 # Therefore, you need to use the script process_seqan_log_files.sh or process_openms_log_files.sh or first.
 
-/path/to/script/process_seqan_log_files.sh seqan.zip
+/path/to/script/process_seqan_log_files.sh seqan-all.log
 
 # Now the directory should have a file all.log and a file geolocations.csv
 # Those are the files you need for generating a plots and stuff
@@ -22,3 +22,5 @@
 
 /path/to/script/create_report.R all.log geolocations.csv report.pdf
 
+# Note: The database file for ip geo locations was obtained from : https://lite.ip2location.com
+# The pyhton code to access the database binary was obtained from: https://github.com/chrislim2888/IP2Location-Python

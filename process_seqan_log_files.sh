@@ -13,6 +13,7 @@ RAW_DATA_FILE=$1
 DATA_FILE="all.log"
 IP_FILE="ips.txt"
 GEO_FILE="geolocations.csv"
+DATABASE="IP2LOCATION-LITE-DB5.BIN"
 
 LINES=$(wc -l < $RAW_DATA_FILE)
 if [[ "$LINES" -eq "0" ]]; then
@@ -51,15 +52,9 @@ head -n -1 $DATA_FILE | cut -f 3 | sort | uniq > $IP_FILE
 
 ips_to_locate=$(wc -l $IP_FILE)
 
-echo "--- Getting Geo location from www.freegeoip.net for $ips_to_locate uniq ip adresses."
-echo "ip,country_code,country,state_code,state,city,zipcode,area,latitude,longitude,metro_code" > $GEO_FILE
-COUNT=1
-for ip_add in $(cat $IP_FILE)
-do
-	#echo -ne "$COUNT of $ips_to_locate\r"
-	curl -s https://www.freegeoip.net/csv/$ip_add >> $GEO_FILE
-	COUNT=$((COUNT+1))
-done
+echo "--- Getting Geo location from local data base for $ips_to_locate uniq ip adresses."
+
+python get_ip_adresses.py $IP_FILE $GEO_FILE $DATABASE
 
 echo "--- tracked $(wc -l geolocations.csv) geolocations."
 echo "--- Done."

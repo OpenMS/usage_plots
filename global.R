@@ -46,7 +46,7 @@ if (nrow(log_data_new)==0)
     stop();
 }
 
-geolocations <- read.table(geo_loc_file_name, sep = ",",
+geolocations <- read.table(geo_loc_file_name, sep = "\t",
                            fill = T, header = T, quote = "",
                            stringsAsFactors = F)
 
@@ -57,9 +57,6 @@ if (nrow(geolocations)==0)
 }
 
 global_logdata <- merge(log_data_new, geolocations, by="ip")
-
-# remove rows containing NA due to parsing errors
-global_logdata <- global_logdata[complete.cases(global_logdata),]
 
 # ~~~~~~~~~~~~~~~~~~~ process cluster information ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # count number of cluster uses per app
@@ -95,6 +92,13 @@ global_logdata["date"] <- lapply(global_logdata["date"], as.Date, format="%Y-%b-
 MAX_DATE <- max(global_logdata$date)
 MIN_DATE <- min(global_logdata$date)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~ numeric transformation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+global_logdata["longitude"] <- lapply(global_logdata["longitude"], as.numeric)
+global_logdata["longitude"] <- lapply(global_logdata["longitude"], as.numeric)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~ remove NA's ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# remove rows containing NA due to parsing errors
+global_logdata <- global_logdata[complete.cases(global_logdata),]
 ###############################################################################
 #                               Helper Functions
 ###############################################################################

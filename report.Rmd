@@ -33,7 +33,7 @@ This is an automatically generated report that evaluates the current SeqAn user 
 ## The Data
 The collected information contains the following columns:
 
-```{r}
+```{r global_info}
 names <- colnames(global_logdata)
 desc <- c("The number of calls.",
           " The IP address",
@@ -46,14 +46,10 @@ desc <- c("The number of calls.",
           "0 or 1, depending on wether the call was from a cluster.",
           "(freeip.net) The country code derived from the ip adress",
           "(freeip.net) The country derived from the ip adress",
-          "(freeip.net) The region code derived from the ip adress",
           "(freeip.net) The region derived from the ip adress",
           "(freeip.net) The city derived from the ip adress",
-          "(freeip.net) The area derived from the ip adress",
-          "(freeip.net) The zipcode derived from the ip adress",
           "(freeip.net) The latidude derived from the ip adress",
-          "(freeip.net) The longitude derived from the ip adress",
-          "(freeip.net) The meta code derived from the ip adress")
+          "(freeip.net) The longitude derived from the ip adress")
 desc_table <- cbind(1:length(names) , names, desc)
 knitr::kable(desc_table, caption = "The column names of the collected user information.")
 ```
@@ -72,7 +68,7 @@ To display the general usage, the plot shows the cumulative usage of all applica
 
 \vspace{20pt}
 
-```{r results='hide'}
+```{r general_usage, results='hide'}
 par(cex=0.7)
 plot_data <- aggregate(global_logdata$calls, list(global_logdata$date), sum)
 plot(plot_data[,1], cumsum(plot_data[,2]), type = "l",xaxt="n",
@@ -92,7 +88,7 @@ dev.off()
 
 ## Worldmap
 
-```{r}
+```{r world_map}
 #library(mapview)
 mapdata <- prepare_data_for_worldmap(global_logdata)
 m <- plotWorldmap(mapdata)
@@ -105,7 +101,7 @@ m
 
 ## Distribution of Countries and Cities per Application
 
-```{r}
+```{r contries_and_cities}
 t_country <- data.frame(table(global_logdata[,c("country","app")]))
 t_country <- t_country[-which(t_country$Freq==0),]
 t_country <- t_country[order(t_country[,2],t_country[,3], decreasing = T),]
@@ -139,7 +135,7 @@ knitr::kable(t)
 
 ## Daily and Weekly usage of Applications
 
-```{r}
+```{r daily_and_weekly_usage}
 avg_calls <- data.frame(aggregate(global_logdata$calls,
                                   list(global_logdata$app), sum),
                         row.names = "Group.1")
@@ -169,7 +165,7 @@ In the following the data was aggregated by application. The first figure pictur
 
 \vspace{20pt}
 
-```{r fig.height=3.3,results='hide'}
+```{r top_10_calls, fig.height=3.3,results='hide'}
 
 par(mar = c(4, 10, 2, 2), cex=0.7)
 barPlot.Top10Apps.calls(global_logdata, TRUE)
@@ -180,7 +176,7 @@ dev.off()
 
 \vspace{20pt}
 
-```{r fig.height=3.3, results='hide'}
+```{r top_10_users, fig.height=3.3, results='hide'}
 par(mar = c(4, 10, 2, 2), cex=0.7)
 barPlot.Top10Apps.users(global_logdata, TRUE)
 dev.copy(png, paste(output_figure_dir, "/top10_applications_by_users_",
@@ -196,7 +192,7 @@ For an overview over the distribution of different operating systems the data wa
 
 \vspace{20pt}
 
-```{r, results='hide'}
+```{r operating_system, results='hide'}
 par(mfrow=c(1,2),cex=0.7)
 pieChart.OS.calls(global_logdata)
 pieChart.OS.users(global_logdata)
@@ -212,7 +208,7 @@ dev.off()
 
 The bar plots on the left display the unique new users. New Unique users means that each IP Adress tracked only appears once in this statistic at the time point of it's first occurence. The line plot on the right displays the same information as a line instead of bars. The red line on the left plot shows the cumulative sum of the new unique users.
 
-```{r echo=F, fig.height=4, results='hide'}
+```{r unique_ips, echo=F, fig.height=4, results='hide'}
 new_unique_ips_per_month()
 dev.copy(png,  paste(output_figure_dir, "/unique_new_users_per_month_",
                      MAX_DATE, ".png", sep = ""))
@@ -221,7 +217,7 @@ dev.off()
 
 For comparison  the following plots show the toal counts of usages (calls) per month, accumulated and as a line plot.
 
-```{r echo=F, fig.height=4, results='hide'}
+```{r total_ips, echo=F, fig.height=4, results='hide'}
 total_ips_per_month()
 dev.copy(png,  paste(output_figure_dir, "/total_calls_per_month_",
                      MAX_DATE, ".png", sep = ""))
