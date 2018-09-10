@@ -27,7 +27,7 @@ This is an automatically generated report that evaluates the current SeqAn user 
 
 \begin{center}
 \large \it \bf
- `r MIN_DATE` to `r MAX_DATE`
+ `r min(global_logdata$data)` to `r max(global_logdata$data)`
 \end{center}
 
 ## The Data
