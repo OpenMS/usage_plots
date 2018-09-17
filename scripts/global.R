@@ -362,7 +362,7 @@ barPlot.Top10Apps.users <- function(data_to_plot, clustered)
 #                           (obtained by prepare_data_for_worldmap())
 plotWorldmap <- function(mapdata)
 {
-	return(leaflet(mapdata) %>% addTiles() %>% addCircleMarkers(~lng, ~lat,
+	return(leaflet(mapdata, width = "100%") %>% addTiles() %>% addCircleMarkers(~lng, ~lat,
 	                                                            radius = ~radius_size,
 	                                                            color = "blue",
 	                                                            fill = T,
