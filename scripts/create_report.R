@@ -71,6 +71,11 @@ if(!require(RColorBrewer)) {
 	library(RColorBrewer, lib.loc=local.lib)
 }
 
+if(!require(yaml)) {
+        install.packages("yaml", repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(RColorBrewer, lib.loc=local.lib)
+}
+
 #if(!require(mapview)) {
 #        install.packages("mapview", repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
 #        library(mapview, lib.loc=local.lib)
