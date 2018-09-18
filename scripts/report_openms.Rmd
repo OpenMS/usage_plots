@@ -30,7 +30,7 @@ This is an automatically generated report that evaluates the current OpenMS user
 
 \begin{center}
 ```{r time_frame, results="markup"}
-print(paste(min(global_logdata$date), "to", max(global_logdata$date))
+print(paste(min(global_logdata$date), "to", max(global_logdata$date)))
 ```
 \end{center}
 
