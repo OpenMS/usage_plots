@@ -94,7 +94,7 @@ message("")
 message(paste("--- Render file ", args[3]))
 rmarkdown::render(report_file_name)
 
-if (file.copy(paste(script.basename, "report.html", sep="/"), output_filename))
+if (file.copy(report_file_name, output_filename))
 {
     message("=============================================================================")
     message(paste("SUCCESS: output file", output_filename, "generated"))
