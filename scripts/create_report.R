@@ -92,16 +92,4 @@ source(paste(script.basename, '/global.R', sep=''));
 
 message("")
 message(paste("--- Render file ", args[3]))
-rmarkdown::render(report_file_name)
-
-if (file.copy(report_file_name, output_filename))
-{
-    message("=============================================================================")
-    message(paste("SUCCESS: output file", output_filename, "generated"))
-    message("=============================================================================")
-    file.remove(paste(script.basename, "report.html", sep="/"))
-} else {
-    message("=============================================================================")
-    message(paste("FAILURE: could not generate output file", output_filename))
-    message("=============================================================================")
-}
+rmarkdown::render(report_file_name, output_file=output_filename, output_format="html_document")
