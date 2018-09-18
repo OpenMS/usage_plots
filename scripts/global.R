@@ -206,7 +206,7 @@ new_unique_ips_per_month <- function(data)
           names.arg = plot_data$Month,
           ylab = "Unique New Users per Month",
           las = 2,
-          main = "New (unique) SeqAn User Count per Month")
+          main = "New (unique) User Count per Month")
   par(new=T)
   plot(cumsum(plot_data$New_Unique_Users), axes=F,
        xlab = "", ylab = "", type = "l", col = "red")
@@ -216,7 +216,7 @@ new_unique_ips_per_month <- function(data)
 
   plot(plot_data$New_Unique_Users, type = "l", col = "blue",
        xlab = "", ylab = "Unique New Users per Month", xaxt='n',
-       main = "New (unique) SeqAn User Count per Month")
+       main = "New (unique) User Count per Month")
   axis(1, at = 1:nrow(plot_data), labels = plot_data$Month, las = 2)
  }
 
@@ -235,7 +235,7 @@ total_ips_per_month <- function(data)
           names.arg = plot_data$Month,
           ylab = "Usages per Month",
           las = 2,
-          main = "SeqAn Usage Count per Month")
+          main = "Usage Count per Month")
   par(new=T)
   plot(cumsum(plot_data$Total_Usage), axes=F,
        xlab = "", ylab = "", type = "l", col = "red")
@@ -245,7 +245,7 @@ total_ips_per_month <- function(data)
 
   plot(plot_data$Total_Usage, type = "l", col = "blue",
        xlab = "", ylab = " Userage per Month", xaxt='n',
-       main = "SeqAn Usage Count per Month")
+       main = "Usage Count per Month")
   axis(1, at = 1:nrow(plot_data), labels = plot_data$Month, las = 2)
 }
 
@@ -368,3 +368,4 @@ plotWorldmap <- function(mapdata)
 	                                                            fill = T,
 	                                                            popup = ~infotext))
 }
+
