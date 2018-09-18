@@ -92,7 +92,7 @@ source(paste(script.basename, '/global.R', sep=''));
 
 message("")
 message(paste("--- Render file ", args[3]))
-rmarkdown::render(paste(script.basename, report_file_name, sep='/'))
+rmarkdown::render(report_file_name)
 
 if (file.copy(paste(script.basename, "report.html", sep="/"), output_filename))
 {
