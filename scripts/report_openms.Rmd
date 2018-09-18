@@ -26,10 +26,10 @@ endDate <- "2018-12-31"
 
 This is an automatically generated report that evaluates the current OpenMS user statistics. The data is taken from the file `log_file_name` preprocessed by a script `global.R`.
 
-### Timeframe
+### Timeframe in tool data
 
 \begin{center}
-```{r time_frame}
+```{r time_frame, results="markup"}
 print(paste(min(global_logdata$data), "to", max(global_logdata$data)))
 ```
 \end{center}
