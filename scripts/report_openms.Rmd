@@ -91,6 +91,35 @@ dev.copy(png, paste(output_dir, "/scholar_citations_openms_tQ26gxIAAAAJ_",
 dev.off()
 ```
 
+
+## OpenMS GitHub Statistics
+
+```{r git, echo=FALSE, hide=TRUE}
+#newIssues <- gh(paste("GET /search/issues?q=repo:OpenMS/OpenMS+type:issue+created:",startDate,"..",endDate,sep=""))$total_count
+#closedIssues <- gh(paste("GET /search/issues?q=repo:OpenMS/OpenMS+type:issue+closed:",startDate,"..",endDate,sep=""))$total_count
+#openedPRs <- gh(paste("GET /search/issues?q=repo:OpenMS/OpenMS+type:pr+created:",startDate,"..",endDate,sep=""))$total_count
+#mergedPRs <- gh(paste("GET /search/issues?q=repo:OpenMS/OpenMS+type:pr+merged:",startDate,"..",endDate,sep=""))$total_count
+baseURL <- "https%3A%2F%2Fapi.github.com%2Fsearch%2Fissues%3Fq%3Drepo%3AOpenMS%2FOpenMS"
+```
+
+Statistics from <http://github.com/OpenMS/OpenMS> from `r startDate` to `r endDate` :
+
+### Issues
+  [![Github issues closed](`r paste("https://img.shields.io/badge/dynamic/json.svg?label=Issues%20closed&url=",baseURL,"%2Btype%3Aissue%2Bclosed%3A",startDate,"..",endDate,"&query=%24.total_count&colorB=brightgreen",sep="")`)](https://github.com/OpenMS/OpenMS/issues)
+
+  [![Github issues opened](`r paste("https://img.shields.io/badge/dynamic/json.svg?label=Issues%20created&url=",baseURL,"%2Btype%3Aissue%2Bcreated%3A",startDate,"..",endDate,"&query=%24.total_count&colorB=red",sep="")`)](https://github.com/OpenMS/OpenMS/issues)
+
+### Pull Requests
+  [![Github PRs merged](`r paste("https://img.shields.io/badge/dynamic/json.svg?label=Pull%20requests%20merged&url=",baseURL,"%2Btype%3Apr%2Bmerged%3A",startDate,"..",endDate,"&query=%24.total_count&colorB=brightgreen",sep="")`)](https://github.com/OpenMS/OpenMS/pull)
+  
+  [![Github PRs opened](`r paste("https://img.shields.io/badge/dynamic/json.svg?label=Pull%20requests%20opened&url=",baseURL,"%2Btype%3Apr%2Bcreated%3A",startDate,"..",endDate,"&query=%24.total_count&colorB=red",sep="")`)](https://github.com/OpenMS/OpenMS/pull)
+
+### Downloads
+
+|![Mac](https://cdn2.iconfinder.com/data/icons/social-icons-color/512/apple-128.png)|![Linux](https://cdn3.iconfinder.com/data/icons/logos-brands-3/24/logo_brand_brands_logos_linux-128.png)|![Windows](https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Windows-128.png)|![Source](https://cdn0.iconfinder.com/data/icons/octicons/1024/package-128.png)|
+|-----|-----|-----|-----|
+|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-Darwin.dmg.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-Linux.deb.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-Win64.exe.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-src.tar.gz.svg)](https://github.com/OpenMS/OpenMS/releases/)|
+
 ## General Usage
 
 To display the general usage, the plot shows the cumulative usage of all application summed together over the given time period.
