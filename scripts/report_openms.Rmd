@@ -28,11 +28,9 @@ This is an automatically generated report that evaluates the current OpenMS user
 
 ### Timeframe in tool data
 
-\begin{center}
-```{r time_frame, results="markup"}
-print(paste(min(global_logdata$date), "to", max(global_logdata$date)))
+```{r time_frame, results="asis"}
+cat(paste(min(global_logdata$date), "to", max(global_logdata$date)))
 ```
-\end{center}
 
 ## The Data
 The collected information contains the following columns:
