@@ -5,11 +5,11 @@ script.basename <- dirname(sub("--file=", "", initial.options[grep("--file=", in
 
 args = commandArgs(trailingOnly=TRUE)
 
-if (length(args) != 3) {
-  stop("USAGE ERROR: LOG_FILE GEOLOCATIONS OUT_DIR\nNote: You obtain the log file and geolocations file by executing ./process_seqan/openms.sh in the directory of the original log files. If you encounter any problems write a mail to svenja.mehringer@fu-berlin.de", call.=FALSE)
+if (length(args) != 4) {
+  stop("USAGE ERROR - please provide the following: all.log geolocations.csv report.md OUT_DIR\nNote: You obtain the log file and geolocations file by executing ./process_[seqan/openms]_log_files.sh on the concatenated raw log file. If you encounter any problems write a mail to svenja.mehringer@fu-berlin.de", call.=FALSE)
 }
 
-output_dir=args[3]
+output_dir=args[4]
 
 if (!(output_dir[1] == "/")) # relative path
 {
@@ -71,6 +71,11 @@ if(!require(RColorBrewer)) {
 	library(RColorBrewer, lib.loc=local.lib)
 }
 
+if(!require(yaml)) {
+        install.packages("yaml", repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(yaml, lib.loc=local.lib)
+}
+
 #if(!require(mapview)) {
 #        install.packages("mapview", repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
 #        library(mapview, lib.loc=local.lib)
@@ -79,6 +84,7 @@ if(!require(RColorBrewer)) {
 
 log_file_name=paste(getwd(), args[1], sep="/");
 geo_loc_file_name=paste(getwd(), args[2], sep="/");
+report_file_name=paste(getwd(), args[3], sep="/");
 
 message("")
 message(paste("--- Source file ", paste(script.basename, '/global.R', sep='')))
@@ -86,16 +92,4 @@ source(paste(script.basename, '/global.R', sep=''));
 
 message("")
 message(paste("--- Render file ", args[3]))
-rmarkdown::render(paste(script.basename, 'report.Rmd', sep='/'))
-
-if (file.copy(paste(script.basename, "report.html", sep="/"), output_filename))
-{
-    message("=============================================================================")
-    message(paste("SUCCESS: output file", output_filename, "generated"))
-    message("=============================================================================")
-    file.remove(paste(script.basename, "report.html", sep="/"))
-} else {
-    message("=============================================================================")
-    message(paste("FAILURE: could not generate output file", output_filename))
-    message("=============================================================================")
-}
+rmarkdown::render(report_file_name, output_file=output_filename, output_format="html_document")

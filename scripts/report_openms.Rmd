@@ -1,6 +1,5 @@
 ---
-title: "SeqAn Usage Statistics"
-author: "Svenja Mehringer"
+title: "OpenMS Usage Statistics"
 output:
   html_document
 ---
@@ -21,13 +20,14 @@ if (!exists("global_logdata"))
 
 ```
 
-This is an automatically generated report that evaluates the current SeqAn user statistics. The data is taken from the file `log_file_name` preprocessed by a script `global.R`.
+This is an automatically generated report that evaluates the current OpenMS user statistics. The data is taken from the file `log_file_name` preprocessed by a script `global.R`.
 
-## Timeframe
+### Timeframe
 
 \begin{center}
-\large \it \bf
- `r MIN_DATE` to `r MAX_DATE`
+```{r time_frame}
+print(paste(min(global_logdata$data), "to", max(global_logdata$data)))
+```
 \end{center}
 
 ## The Data
@@ -42,7 +42,7 @@ desc <- c("The number of calls.",
           "The application version",
           "The Bitsystem. Either 32 or 64.",
           "The operating system (Windows, Linux or Mac OS)",
-          "A Parameter only used in OpenMS. (Here: SeqAn)",
+          "Either OpenMS_Default or KNIME",
           "0 or 1, depending on wether the call was from a cluster.",
           "(freeip.net) The country code derived from the ip adress",
           "(freeip.net) The country derived from the ip adress",

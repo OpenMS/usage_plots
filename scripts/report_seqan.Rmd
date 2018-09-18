@@ -1,0 +1,225 @@
+---
+title: "SeqAn Usage Statistics"
+author: "Svenja Mehringer"
+output:
+  html_document
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      cache=FALSE,
+                      message = F,
+                      warning = F,
+                      fig.align = "center")
+
+
+if (!exists("global_logdata"))
+{
+    print("[ERROR - report_openms.Rmd]: variable 'global_logdata' is not defined. Please source global.R beforehand.");
+    stop();
+}
+
+```
+
+This is an automatically generated report that evaluates the current SeqAn user statistics. The data is taken from the file `log_file_name` preprocessed by a script `global.R`.
+
+## Timeframe
+
+\begin{center}
+\large \it \bf
+ `r min(global_logdata$data)` to `r max(global_logdata$data)`
+\end{center}
+
+## The Data
+The collected information contains the following columns:
+
+```{r global_info}
+names <- colnames(global_logdata)
+desc <- c("The number of calls.",
+          " The IP address",
+          "The Date of the call",
+          "The application name",
+          "The application version",
+          "The Bitsystem. Either 32 or 64.",
+          "The operating system (Windows, Linux or Mac OS)",
+          "A Parameter only used in OpenMS. (Here: SeqAn)",
+          "0 or 1, depending on wether the call was from a cluster.",
+          "(freeip.net) The country code derived from the ip adress",
+          "(freeip.net) The country derived from the ip adress",
+          "(freeip.net) The region derived from the ip adress",
+          "(freeip.net) The city derived from the ip adress",
+          "(freeip.net) The latidude derived from the ip adress",
+          "(freeip.net) The longitude derived from the ip adress")
+desc_table <- cbind(1:length(names) , names, desc)
+knitr::kable(desc_table, caption = "The column names of the collected user information.")
+```
+
+Some preprocessing details (`global.R`):
+
+* All entries marked as clusters are removed from the data set.
+* A separate table keeps track of the amount of cluster uses.
+* The date column is transform to a date-format of R.
+
+\clearpage
+
+## General Usage
+
+To display the general usage, the plot shows the cumulative usage of all application summed together over the given time period.
+
+\vspace{20pt}
+
+```{r general_usage, results='hide'}
+par(cex=0.7)
+plot_data <- aggregate(global_logdata$calls, list(global_logdata$date), sum)
+plot(plot_data[,1], cumsum(plot_data[,2]), type = "l",xaxt="n",
+     xlab = paste("Date"),
+     ylab = "Number of Calls", col=c("blue"),
+     main="Cumulative Sum of All Calls")
+axis(1, at=(plot_data[,1])[seq(1,nrow(plot_data),length.out = 9)],
+     labels = format((plot_data[,1])[seq(1,nrow(plot_data),length.out = 9)], "%b %Y") )
+polygon(c(plot_data[,1], rev(plot_data[,1])),
+        c(rep(0, nrow(plot_data)), rev(cumsum(plot_data[,2]))),
+        col='lightblue')
+
+dev.copy(png, paste(output_dir, "/total_cumulative_sum_of_usages_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+## Worldmap
+
+```{r world_map}
+#library(mapview)
+mapdata <- prepare_data_for_worldmap(global_logdata)
+m <- plotWorldmap(mapdata)
+m
+#mapshot(m, file = "map.png")
+#plot(m)
+```
+
+\clearpage
+
+## Top 10 Applications
+
+In the following the data was aggregated by application. The first figure pictures the sum of all calls of each application, while the second shows the number of unique users. The figures differentiate between individual and cluster calls/users. The term 'cluster calls/users' refers to IP addresses that were previously identified as part of a cluster, but left in the dataset as a representative for the corresponding cluster.
+
+\vspace{20pt}
+
+```{r top_10_calls, fig.height=3.3,results='hide'}
+
+par(mar = c(4, 10, 2, 2), cex=0.7)
+barPlot.Top10Apps.calls(global_logdata, TRUE)
+dev.copy(png, paste(output_dir, "/top10_applications_by_calls_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\vspace{20pt}
+
+```{r top_10_users, fig.height=3.3, results='hide'}
+par(mar = c(4, 10, 2, 2), cex=0.7)
+barPlot.Top10Apps.users(global_logdata, TRUE)
+dev.copy(png, paste(output_dir, "/top10_applications_by_users_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\clearpage
+
+## Operating System
+
+For an overview over the distribution of different operating systems the data was aggregated by column 'os'. As before, the first figure pictures the sum of all calls of each operating system, while the second shows the number of unique users.
+
+\vspace{20pt}
+
+```{r operating_system, results='hide'}
+par(mfrow=c(1,2),cex=0.7)
+pieChart.OS.calls(global_logdata)
+pieChart.OS.users(global_logdata)
+
+dev.copy(png,  paste(output_dir, "/operating_system_distribution_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\pagebreak
+
+## Unique User Statistic
+
+The bar plots on the left display the unique new users. New Unique users means that each IP Adress tracked only appears once in this statistic at the time point of it's first occurence. The line plot on the right displays the same information as a line instead of bars. The red line on the left plot shows the cumulative sum of the new unique users.
+
+```{r unique_ips, echo=F, fig.height=4, results='hide'}
+new_unique_ips_per_month()
+dev.copy(png,  paste(output_dir, "/unique_new_users_per_month_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+For comparison  the following plots show the toal counts of usages (calls) per month, accumulated and as a line plot.
+
+```{r total_ips, echo=F, fig.height=4, results='hide'}
+total_ips_per_month()
+dev.copy(png,  paste(output_dir, "/total_calls_per_month_",
+                     MAX_DATE, ".png", sep = ""))
+dev.off()
+```
+
+\clearpage
+
+## Distribution of Countries and Cities per Application
+
+```{r contries_and_cities}
+t_country <- data.frame(table(global_logdata[,c("country","app")]))
+t_country <- t_country[-which(t_country$Freq==0),]
+t_country <- t_country[order(t_country[,2],t_country[,3], decreasing = T),]
+r_country <- (t_country[,1])[!duplicated(t_country[,2])]
+t_country <- data.frame(table(t_country$app))
+t_country <- cbind(t_country[order(t_country[,1],decreasing = T),],r_country)
+
+
+t_city <- data.frame(table(global_logdata[,c("city","app")]))
+t_city <- t_city[-which(t_city$Freq==0),]
+t_city <- t_city[order(t_city[,2],t_city[,3], decreasing = T),]
+r_city <- (t_city[,1])[!duplicated(t_city[,2])]
+t_city <- data.frame(table(t_city$app))
+t_city <- cbind(t_city[order(t_city[,1],decreasing = T),],r_city)
+
+t <- data.frame(t_country[,2:3], t_city[,2:3], row.names = t_country[,1])
+#t <- t[which(rownames(t) %in% seqan_apps),]
+t <- t[order(t[,1], decreasing = T),]
+
+colnames(t) <- c("#Countries", "Country with most calls",
+                 "#Cities", "City with most calls")
+
+write.table(t, sep = "\t",
+            file = paste(output_dir, "/Country_and_city_distribution_per_app_",
+                         MAX_DATE, ".tsv", sep = ""))
+
+knitr::kable(t)
+```
+
+\clearpage
+
+## Daily and Weekly usage of Applications
+
+```{r daily_and_weekly_usage}
+avg_calls <- data.frame(aggregate(global_logdata$calls,
+                                  list(global_logdata$app), sum),
+                        row.names = "Group.1")
+avg_calls <- cbind(avg_calls,
+                   avg_calls$x / as.double(difftime(MAX_DATE,
+                                                    MIN_DATE,
+                                                    units = "days")))
+avg_calls <- cbind(avg_calls,
+                   avg_calls$x / as.double(difftime(MAX_DATE,
+                                                    MIN_DATE,
+                                                    units = "weeks")))
+#avg_calls <- avg_calls[(rownames(avg_calls) %in% seqan_apps), ]
+colnames(avg_calls) <- c("Total Sum", "Average per Day", "Average per Week")
+
+write.table(t, sep = "\t",
+            file = paste(output_dir, "/Daily_and_weekly_usage_per_app_",
+                         MAX_DATE, ".tsv", sep = ""))
+
+knitr::kable(avg_calls)
+```
