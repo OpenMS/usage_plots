@@ -56,7 +56,27 @@ if (nrow(geolocations)==0)
     stop();
 }
 
+geolocations <- read.table(geo_loc_file_name, sep = "\t",
+                           fill = T, header = T, quote = "",
+                           stringsAsFactors = F)
+
 global_logdata <- merge(log_data_new, geolocations, by="ip")
+
+## Add tooltags if present
+if (!exists("tooltag_file_name"))
+{
+	tool_tags <- read.table(tool_tag_file_name, sep = "\t",
+	                           fill = T, header = T, quote = "",
+	                           stringsAsFactors = F)
+	global_logdata <- merge(global_logdata, tool_tags, by.x="app", by.y="Tool", all.x=T)
+	global_logdata[is.na(global_logdata[,"DevelopedBy"]),"DevelopedBy"] = "unknown"
+}
+else
+{
+	global_logdata$DevelopedBy = "any"
+}
+
+
 
 # ~~~~~~~~~~~~~~~~~~~ process cluster information ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # count number of cluster uses per app

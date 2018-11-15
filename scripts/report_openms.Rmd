@@ -136,16 +136,12 @@ To display the general usage, the plot shows the cumulative usage of all applica
 
 ```{r general_usage, results='hide'}
 par(cex=0.7)
-plot_data <- aggregate(global_logdata$calls, list(global_logdata$date), sum)
-plot(plot_data[,1], cumsum(plot_data[,2]), type = "l",xaxt="n",
-     xlab = paste("Date"),
-     ylab = "Number of Calls", col=c("blue"),
-     main="Cumulative Sum of All Calls")
-axis(1, at=(plot_data[,1])[seq(1,nrow(plot_data),length.out = 9)],
-     labels = format((plot_data[,1])[seq(1,nrow(plot_data),length.out = 9)], "%b %Y") )
-polygon(c(plot_data[,1], rev(plot_data[,1])),
-        c(rep(0, nrow(plot_data)), rev(cumsum(plot_data[,2]))),
-        col='lightblue')
+plot_data <- aggregate(calls ~ DevelopedBy + date, data = global_logdata, sum)
+
+ggplot(plot_data, aes(x=date, y=cumsum(calls), fill=DevelopedBy)) + 
+  geom_area(aes(colour=DevelopedBy, fill=DevelopedBy))
+axis(1, at=(plot_data[,2])[seq(1,nrow(plot_data),length.out = 9)],
+       labels = format((plot_data[,2])[seq(1,nrow(plot_data),length.out = 9)], "%b %Y") )
 
 dev.copy(png, paste(output_dir, "/total_cumulative_sum_of_usages_",
                      MAX_DATE, ".png", sep = ""))
