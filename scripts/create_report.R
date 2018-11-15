@@ -85,9 +85,10 @@ if(!require(yaml)) {
 log_file_name=paste(getwd(), args[1], sep="/");
 geo_loc_file_name=paste(getwd(), args[2], sep="/");
 report_file_name=paste(getwd(), args[3], sep="/");
-tooltag_file_name=""; 
+
 if (length(args) > 4) {
 	tooltag_file_name=paste(getwd(), args[5], sep="/");
+	message(paste("Found tooltags in ", tooltag_file_name))
 }
 
 message("")

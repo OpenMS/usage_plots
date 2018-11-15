@@ -64,7 +64,7 @@ geolocations <- read.table(geo_loc_file_name, sep = "\t",
 global_logdata <- merge(log_data_new, geolocations, by="ip")
 
 ## Add tooltags if present
-if (!exists("tooltag_file_name"))
+if (exists("tooltag_file_name"))
 {
 	tool_tags <- read.table(tool_tag_file_name, sep = "\t",
 	                           fill = T, header = T, quote = "",
