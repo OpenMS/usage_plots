@@ -71,9 +71,7 @@ if (!exists("tooltag_file_name"))
 	                           stringsAsFactors = F)
 	global_logdata <- merge(global_logdata, tool_tags, by.x="app", by.y="Tool", all.x=T)
 	global_logdata[is.na(global_logdata[,"DevelopedBy"]),"DevelopedBy"] = "unknown"
-}
-else
-{
+} else {
 	global_logdata$DevelopedBy = "any"
 }
 
