@@ -6,7 +6,7 @@ script.basename <- dirname(sub("--file=", "", initial.options[grep("--file=", in
 args = commandArgs(trailingOnly=TRUE)
 
 if (length(args) < 4 || length(args) >= 6) {
-  stop("USAGE ERROR - please provide the following: all.log geolocations.csv report.md OUT_DIR (tool_tags.tsv)\nNote: You obtain the log file and geolocations file by executing ./process_[seqan/openms]_log_files.sh on the concatenated raw log file. If you encounter any problems write a mail to svenja.mehringer@fu-berlin.de", call.=FALSE)
+  stop("USAGE ERROR - please provide the following: all.log geolocations.csv report.md OUT_DIR [tool_tags.tsv]\nNote: You obtain the log file and geolocations file by executing ./process_[seqan/openms]_log_files.sh on the concatenated raw log file. If you encounter any problems write a mail to svenja.mehringer@fu-berlin.de", call.=FALSE)
 }
 
 output_dir=args[4]
