@@ -1,6 +1,7 @@
 ## @knitr global_file
 if(!require(leaflet)) {install.packages("leaflet"); library(leaflet)}
-if(!require(tidyr)) {install.packages("tidyr"); library(leaflet)}
+if(!require(tidyr)) {install.packages("tidyr"); library(tidyr)}
+if(!require(scholar)) {install.packages("scholar"); library(scholar)}
 if(!require(ggplot2)) {install.packages("ggplot2"); library(ggplot2)}
 if(!require(lattice)) {install.packages("lattice"); library(lattice)}
 if(!require(rworldmap)) {install.packages("rworldmap"); library(rworldmap)}

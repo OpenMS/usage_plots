@@ -70,9 +70,6 @@ The number of citations of a set of important selected publications about/using 
 
 \vspace{20pt}
 ```{r citations, results='hide'}
-## TODO load them beforehand
-library(scholar)
-library(ggplot2)
 
 ## The ID at the end of your profile link: https://scholar.google.de/citations?hl=de&user=tQ26gxIAAAAJ
 cit <- get_citation_history('tQ26gxIAAAAJ')
@@ -126,7 +123,7 @@ table {
 
 |![Mac](https://cdn2.iconfinder.com/data/icons/social-icons-color/512/apple-128.png)|![Linux](https://cdn3.iconfinder.com/data/icons/logos-brands-3/24/logo_brand_brands_logos_linux-128.png)|![Windows](https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Windows-128.png)|![Source](https://cdn0.iconfinder.com/data/icons/octicons/1024/package-128.png)|
 |------------------------------------|------------------------------------|------------------------------------|------------------------------------|
-|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-Darwin.dmg.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-Linux.deb.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-Win64.exe.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.3.0-src.tar.gz.svg)](https://github.com/OpenMS/OpenMS/releases/)|
+|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-macOS.dmg.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-Debian-Linux-x86_64.deb.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-Win64.exe.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-src.tar.gz.svg)](https://github.com/OpenMS/OpenMS/releases/)|
 
 ## General Usage
 
