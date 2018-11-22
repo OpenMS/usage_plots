@@ -1,5 +1,8 @@
 ## @knitr global_file
 if(!require(leaflet)) {install.packages("leaflet"); library(leaflet)}
+if(!require(tidyr)) {install.packages("tidyr"); library(tidyr)}
+if(!require(scholar)) {install.packages("scholar"); library(scholar)}
+if(!require(ggplot2)) {install.packages("ggplot2"); library(ggplot2)}
 if(!require(lattice)) {install.packages("lattice"); library(lattice)}
 if(!require(rworldmap)) {install.packages("rworldmap"); library(rworldmap)}
 if(!require(RColorBrewer)) {install.packages("RColorBrewer"); library(RColorBrewer)}
@@ -57,6 +60,22 @@ if (nrow(geolocations)==0)
 }
 
 global_logdata <- merge(log_data_new, geolocations, by="ip")
+
+## Add tooltags if present
+if (exists("tooltag_file_name"))
+{
+	tool_tags <- read.table(tooltag_file_name, sep = "\t",
+	                        fill = T, header = T, quote = "",
+	                        stringsAsFactors = F)
+	global_logdata <- merge(global_logdata, tool_tags, by.x="app", by.y="Tool", all.x=T)
+  ## If not DevelopedBy tag registered, assume "external" tool
+	global_logdata[is.na(global_logdata[,"DevelopedBy"]),"DevelopedBy"] = "extern"
+} else {
+  ## If no tooltags present, use only one category
+	global_logdata$DevelopedBy = "any"
+}
+
+
 
 # ~~~~~~~~~~~~~~~~~~~ process cluster information ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # count number of cluster uses per app
