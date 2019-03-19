@@ -246,25 +246,25 @@ unique_ips_per_month <- function(data)
   # Unique User Count
   local_logdata      <- global_logdata
   local_logdata$date <- strftime(local_logdata$date, format = "%Y-%m")
-  plot_data <- aggregate(cbind(calls,ip) ~ date, data = local_logdata, function(x){sum(x[!duplicated(x$ip),]$calls)})
+  plot_data <- aggregate(local_logdata[,c('ip','calls')], local_logdata[,'date'], function(x){sum(x[!duplicated(x[,'ip']),'calls'])})
   plot_data <- plot_data[-nrow(plot_data),] # exclude last month because it is probably incomplete
-  colnames(plot_data) <- c("Month", "New_Unique_Users")
+  colnames(plot_data) <- c("Month", "Unique_Users")
 
-  barplot(plot_data$New_Unique_Users, col = "lightblue",
+  barplot(plot_data$Unique_Users, col = "lightblue",
           names.arg = plot_data$Month,
-          ylab = "Unique New Users per Month",
+          ylab = "Unique Users per Month",
           las = 2,
-          main = "New (unique) User Count per Month")
+          main = "Unique User Count per Month")
   par(new=T)
-  plot(cumsum(plot_data$New_Unique_Users), axes=F,
+  plot(cumsum(plot_data$Unique_Users), axes=F,
        xlab = "", ylab = "", type = "l", col = "red")
-  axis(4, at = round(seq(1, max(cumsum(plot_data$New_Unique_Users)),
+  axis(4, at = round(seq(1, max(cumsum(plot_data$Unique_Users)),
                          length.out = 6)), col="red")
   mtext("Cumulative sum of Unique Users", side=4, line=3, cex.lab=1, col="red")
 
-  plot(plot_data$New_Unique_Users, type = "l", col = "blue",
-       xlab = "", ylab = "Unique New Users per Month", xaxt='n',
-       main = "New (unique) User Count per Month")
+  plot(plot_data$Unique_Users, type = "l", col = "blue",
+       xlab = "", ylab = "Unique Users per Month", xaxt='n',
+       main = "Unique User Count per Month")
   axis(1, at = 1:nrow(plot_data), labels = plot_data$Month, las = 2)
  }
 
