@@ -246,7 +246,7 @@ unique_ips_per_month <- function(data)
   # Unique User Count
   local_logdata      <- global_logdata
   local_logdata$date <- strftime(local_logdata$date, format = "%Y-%m")
-  plot_data <- aggregate(local_logdata[,c('ip','calls')], local_logdata[,'date'], function(x){sum(x[!duplicated(x[,'ip']),'calls'])})
+  plot_data <- aggregate(cbind(ip,calls) ~ date, data = local_logdata, function(x){sum(as.matrix(x)[!duplicated(as.matrix(x)[,'ip']),'calls'])})
   plot_data <- plot_data[-nrow(plot_data),] # exclude last month because it is probably incomplete
   colnames(plot_data) <- c("Month", "Unique_Users")
 
