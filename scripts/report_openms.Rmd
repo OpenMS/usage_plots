@@ -19,8 +19,8 @@ if (!exists("global_logdata"))
 }
 
 ##TODO make parameter of script
-startDate <- "2018-01-01"
-endDate <- "2018-12-31"
+startDate <- "2018-12-31"
+endDate <- "2020-01-01"
 
 ```
 
