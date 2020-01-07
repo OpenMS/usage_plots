@@ -13,8 +13,8 @@ png('scholar_citations_tQ26gxIAAAAJ.png',width=800,height=300,res=150)
 ggplot(cit,aes(x=year,y=cites))+
   geom_bar(stat='identity')+
   ## TODO make the years scale automatically
-  scale_x_continuous(breaks=2006:2018,
-                     labels=c("2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018"))+
+  scale_x_continuous(breaks=2006:2020,
+                     labels=c("2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"))+
   theme_bw()+
   xlab('Year of citation')+
   ylab('Google Scholar\n cites')+
