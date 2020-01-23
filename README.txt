@@ -3,7 +3,7 @@
 
 # 1) Get log files
 # ----------------
-# The original server calls are stored in Tuebingen.
+# The original server calls are stored in Tuebingen (abibuilder0).
 # Ask someone in Tuebingen to send you a zipped file or get access to the server yourself
 
 # 2) Prepare log files
@@ -24,3 +24,7 @@
 
 # Note: The database file for ip geo locations was obtained from : https://lite.ip2location.com
 # The pyhton code to access the database binary was obtained from: https://github.com/chrislim2888/IP2Location-Python
+
+# How to update version files
+# ===============================
+# The Tübingen REST server pull the seqan_versions.txt and openms_versions.txt file once per night so these can be directly updated in this repository.
