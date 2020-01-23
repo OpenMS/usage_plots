@@ -27,4 +27,4 @@
 
 # How to update version files
 # ===============================
-# The Tübingen REST server pull the seqan_versions.txt and openms_versions.txt file once per night so these can be directly updated in this repository.
+# The Tübingen REST server pulls the seqan_versions.txt and openms_versions.txt file once per night so these can be directly updated in this repository.
