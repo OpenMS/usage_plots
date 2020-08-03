@@ -15,6 +15,8 @@ gustaf_mate_joining	1.0.10
 insegt	1.1.10
 lambda	1.0.2
 lambda_indexer	1.0.2
+lara	2.0.1
+mars	1.0.0
 mason_genome	2.0.9
 mason_methylation	2.0.9
 mason_frag_sequencing	2.0.9
