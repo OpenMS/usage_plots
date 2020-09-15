@@ -70,16 +70,19 @@ To display the general usage, the plot shows the cumulative usage of all applica
 
 ```{r general_usage, results='hide'}
 par(cex=0.7)
-plot_data <- aggregate(global_logdata$calls, list(global_logdata$date), sum)
-plot(plot_data[,1], cumsum(plot_data[,2]), type = "l",xaxt="n",
-     xlab = paste("Date"),
-     ylab = "Number of Calls", col=c("blue"),
-     main="Cumulative Sum of All Calls")
-axis(1, at=(plot_data[,1])[seq(1,nrow(plot_data),length.out = 9)],
-     labels = format((plot_data[,1])[seq(1,nrow(plot_data),length.out = 9)], "%b %Y") )
-polygon(c(plot_data[,1], rev(plot_data[,1])),
-        c(rep(0, nrow(plot_data)), rev(cumsum(plot_data[,2]))),
-        col='lightblue')
+plot_data <- aggregate(calls ~ DevelopedBy + date, data = global_logdata, sum)
+plot_data$DevelopedBy <- as.factor(plot_data$DevelopedBy)
+plot_data <- complete(plot_data, DevelopedBy, date, fill=list(calls=0))
+plot_data_wide <- spread(plot_data, DevelopedBy, calls)
+plot_data_wide_cumsum <- cbind(plot_data_wide[,1],apply(plot_data_wide[,-1],2,cumsum))
+plot_data_long <- gather(plot_data_wide_cumsum, DevelopedBy, calls, levels(plot_data$DevelopedBy))
+
+ggplot(plot_data_long, aes(x=date, y=calls)) +
+  geom_area(aes(colour=DevelopedBy, fill=DevelopedBy), colour="black", size=.2, alpha=.7) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 months") +
+  theme(axis.text.x = element_text(angle = 25, vjust = 1.0, hjust = 1.0)) +
+  labs(title= "Number of calls of SeqAn or external applications", fill = "Developed by:", x = "Month", y = "Calls")
+
 
 dev.copy(png, paste(output_dir, "/total_cumulative_sum_of_usages_",
                      MAX_DATE, ".png", sep = ""))
