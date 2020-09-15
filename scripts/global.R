@@ -1,11 +1,38 @@
 ## @knitr global_file
-if(!require(leaflet)) {install.packages("leaflet"); library(leaflet)}
-if(!require(tidyr)) {install.packages("tidyr"); library(tidyr)}
-if(!require(scholar)) {install.packages("scholar"); library(scholar)}
-if(!require(ggplot2)) {install.packages("ggplot2"); library(ggplot2)}
-if(!require(lattice)) {install.packages("lattice"); library(lattice)}
-if(!require(rworldmap)) {install.packages("rworldmap"); library(rworldmap)}
-if(!require(RColorBrewer)) {install.packages("RColorBrewer"); library(RColorBrewer)}
+if(!require(leaflet)) {
+        install.packages('leaflet', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(leaflet, lib.loc=local.lib)
+}
+
+if(!require(tidyr)) {
+        install.packages('tidyr', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(tidyr, lib.loc=local.lib)
+}
+
+if(!require(ggplot2)) {
+        install.packages('ggplot2', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(ggplot2, lib.loc=local.lib)
+}
+
+if(!require(scholar)) {
+	install.packages('scholar', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+       	library(scholar, lib.loc=local.lib)
+}
+
+if(!require(lattice)) {
+        install.packages('lattice', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(lattice, lib.loc=local.lib)
+}
+
+if(!require(rworldmap)) {
+        install.packages('rworldmap', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(rworldmap, lib.loc=local.lib)
+}
+
+if(!require(RColorBrewer)) {
+        install.packages('RColorBrewer', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+        library(RColorBrewer, lib.loc=local.lib)
+}
 
 # global:
 seqan_apps <- c("alf"     ,"bisar"   ,"casbar"  ,"four2three"      ,"dfi"     ,"compute_gain"    ,"fiona"   ,
