@@ -14,10 +14,10 @@ if(!require(ggplot2)) {
         library(ggplot2, lib.loc=local.lib)
 }
 
-# if(!require(scholar)) {
-#         install.packages('scholar', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
-#         library(scholar, lib.loc=local.lib)
-# }
+if(!require(scholar)) {
+	install.packages('scholar', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
+       	library(scholar, lib.loc=local.lib)
+}
 
 if(!require(lattice)) {
         install.packages('lattice', repos = c('http://rforge.net', 'http://cran.rstudio.org'), type = 'source', lib=local.lib)
