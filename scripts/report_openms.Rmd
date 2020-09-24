@@ -21,6 +21,7 @@ if (!exists("global_logdata"))
 ##TODO make parameter of script
 startDate <- "2018-12-31"
 endDate <- "2020-01-01"
+##TODO also add OpenMS version and current year to parameters
 
 ```
 
@@ -78,8 +79,8 @@ cit <- get_citation_history('tQ26gxIAAAAJ')
 
 ggplot(cit,aes(x=year,y=cites))+
   geom_bar(stat='identity')+
-  scale_x_continuous(breaks=2006:2019,
-                     labels=c("2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"))+
+  scale_x_continuous(breaks=2006:2020,
+                     labels=c("2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"))+
   theme_bw()+
   xlab('Year of citation')+
   ylab('Google Scholar\n cites')+
@@ -123,7 +124,7 @@ table {
 
 |![Mac](https://cdn2.iconfinder.com/data/icons/social-icons-color/512/apple-128.png)|![Linux](https://cdn3.iconfinder.com/data/icons/logos-brands-3/24/logo_brand_brands_logos_linux-128.png)|![Windows](https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Windows-128.png)|![Source](https://cdn0.iconfinder.com/data/icons/octicons/1024/package-128.png)|
 |------------------------------------|------------------------------------|------------------------------------|------------------------------------|
-|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-macOS.dmg.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-Debian-Linux-x86_64.deb.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-Win64.exe.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.4.0-src.tar.gz.svg)](https://github.com/OpenMS/OpenMS/releases/)|
+|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.5.0-macOS.dmg.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.5.0-Debian-Linux-x86_64.deb.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.5.0-Win64.exe.svg)](https://github.com/OpenMS/OpenMS/releases/)|[![Github releases (by asset)](https://img.shields.io/github/downloads/OpenMS/OpenMS/latest/OpenMS-2.5.0-src.tar.gz.svg)](https://github.com/OpenMS/OpenMS/releases/)|
 
 ## General Usage
 
