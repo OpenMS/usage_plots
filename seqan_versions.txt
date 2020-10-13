@@ -1,4 +1,4 @@
-seqan3	3.0.1
+seqan3	3.0.2
 seqan	2.4.0
 alf	1.1.10
 bisar	0.1.10
