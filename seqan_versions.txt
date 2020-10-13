@@ -36,6 +36,7 @@ rabema_prepare_sam	1.2.10
 rabema_build_gold_standard	1.2.10
 rabema_evaluate	1.2.10
 rabema_do_search	1.2.10
+raptor	1.0.1
 razers	1.5.8
 razers3	3.5.8
 razers3_compPHSens	3.5.8
