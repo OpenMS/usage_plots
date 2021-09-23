@@ -26,6 +26,7 @@ mason_simulator	2.0.9
 mason_splicing	2.0.9
 mason_tests	2.0.9
 micro_razers	1.0.11
+needle	1.0.0
 roi_plot_thumbnails	0.2.12
 bam2roi	0.2.12
 roi_feature_projection	0.2.12
