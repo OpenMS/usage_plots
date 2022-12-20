@@ -12,6 +12,7 @@ RUN sudo apt-get -y install gawk sshpass libudunits2-dev libcairo2-dev libgdal-d
 RUN export RSTUDIO_PANDOC=/usr/bin/
 ENV RSTUDIO_PANDOC=/usr/bin
 
+RUN sudo R --version
 RUN echo "Installing R packages..."
 ## mapview not needed anymore
 COPY Rpackages.R Rpackages.R
