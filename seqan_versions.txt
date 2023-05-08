@@ -1,6 +1,6 @@
 seqan3	3.2.0
 seqan	2.4.0
-sharg	1.0.0
+sharg	1.1.0
 alf	1.1.10
 bisar	0.1.10
 casbar	0.1.10
