@@ -1,4 +1,4 @@
-FROM ubuntu_1804
+FROM ubuntu_2204
 RUN echo "Installing apt packages..."
 
 RUN sudo apt-get -y update >> packages.log
