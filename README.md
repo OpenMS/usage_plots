@@ -3,7 +3,7 @@ Usage Statistics of OpenMS and SeqAn
 
 This repo contains scripts, data and other files, that are helpful for acquiring and analysing the usage statistics for OpenMS and SeqAn.
 
-A cron job which triggers the analysis of log files is set up on [Jenkins](https://abibuilder.informatik.uni-tuebingen.de/jenkins/job/usage_statistics/job/usageStatistics/).
+A cron job which triggers the analysis of log files is set up on [Jenkins](https://abibuilder.cs.uni-tuebingen.de/jenkins/job/usage_statistics/job/usageStatistics/).
 
 :exclamation:**Important**:exclamation:: The top level `seqan_versions.txt` and `openms_versions.txt` must not be moved to a different location because it is needed to ensure a correct server response to a user call. The Tübingen REST server pulls both file once per night, so if a version changes, they can be directly updated in this repository.
 
