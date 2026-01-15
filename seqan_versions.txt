@@ -8,8 +8,6 @@ mars	1.0.0
 needle	1.0.3
 raptor	3.0.1
 Vaquita	0.4.0
-Vaquita	call	0.3.0
-Vaquita	merge	0.3.0
 alf	1.1.14
 bam2roi	0.2.16
 bisar	0.1.14
