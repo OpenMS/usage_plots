@@ -1,0 +1,262 @@
+---
+output:
+  html_document:
+    theme: sandstone
+    toc: true
+    toc_float: true
+    toc_depth: 6
+    mathjax: null
+    css: assets/report.css
+    self_contained: true
+    includes:
+      in_header: assets/favicon/favicon.html
+params:
+  project: "SeqAn"
+title: "`r paste(params$project, 'Usage Statistics')`"
+---
+
+<script src="https://rawgit.com/rowanwins/leaflet-easyPrint/gh-pages/dist/bundle.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.align = "center")
+```
+
+This is an automatically generated report that evaluates the current `r params$project` user statistics. The data is taken from the file `log_file_name` preprocessed by a script `global.R`.
+
+<abbr title="Only works for Jenkins"><a href="*zip*/`r paste(params$project, CURRENT_DATE, sep='_')`.zip" download class="btn btn-info btn-dl" target="_blank">ZIP</a></abbr>
+
+## Timeframe
+
+| What  | Date             |
+|------:|:----------------:|
+| From  | `r MIN_DATE`     |
+| To    | `r MAX_DATE`     |
+| Today | `r CURRENT_DATE` |
+
+The timeframe spans `r floor(DIFF_TIME_WEEKS)` weeks and `r DIFF_TIME_DAYS - floor(DIFF_TIME_WEEKS) * 7` days.\
+This is equivalent to `r scales::comma(DIFF_TIME_DAYS)` days or `r format(DIFF_TIME_WEEKS, digits = 2, nsmall = 2)` weeks.
+
+## The Data
+
+The collected information contains the following columns:
+
+| ID | Name         | Description                                  |
+|----|--------------|----------------------------------------------|
+| 1  | app          | Application name                             |
+| 2  | ip           | IP address                                   |
+| 3  | calls        | Number of calls                              |
+| 4  | date         | Date of the call                             |
+| 5  | version      | Application version                          |
+| 6  | cpu          | CPU-Mode (32/64-bit)                         |
+| 7  | os           | The operating system                         |
+| 8  | who          | How the call was sent (e.g., library, KNIME) |
+| 9  | clustered    | Call originates from known cluster           |
+| 10 | country_code | Country code¹                                |
+| 11 | country      | Country¹                                     |
+| 12 | region       | Region¹                                      |
+| 13 | city         | City¹                                        |
+| 14 | longitude    | Longitude¹                                   |
+| 15 | latitude     | Latidude¹                                    |
+| 16 | DevelopedBy  | Tooltag (de.NBI, extern)                     |
+
+<p style="margin-top: -20px">¹ <small>Derived from IP</small></p>
+
+## Citations
+
+```{r citations}
+scholar_id <- if(params$project == "OpenMS") "tQ26gxIAAAAJ" else "JWLBQHwAAAAJ"
+citations <- plot_citations(scholar_id)
+plot_files <- savePlots("scholar_citations", citations)
+```
+
+The number of citations of a set of important [selected publications](https://scholar.google.de/citations?hl=de&user=`r scholar_id`) about or using `r params$project`:
+
+`r display_plot_with_buttons(plot_files)`
+
+## Downloads {.tabset}
+
+### Libraries
+
+```{r downloads_libs}
+download_stats <- get_aggregated_downloads()
+table_files <- saveTable("downloads_libs_", download_stats$libraries)
+```
+
+`r display_table_with_buttons(table_files)`
+
+### Apps
+
+```{r downloads_apps}
+table_files <- saveTable("downloads_apps_", download_stats$apps)
+```
+
+`r display_table_with_buttons(table_files)`
+
+## {.unlisted .unnumbered}
+
+## GitHub Issues and PR
+
+```{r githubpr}
+github <- get_aggregated_contributions()
+table_files <- saveTable("github_contributions_", github)
+```
+
+`r display_table_with_buttons(table_files)`
+
+## General Usage
+
+To display the general usage, the plot shows the cumulative usage of all application summed together over the given time period.
+
+```{r general_usage}
+general_usage_plot <- general_usage(params$project)
+plot_files <- savePlots("total_cumulative_sum_of_usages_", general_usage_plot)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+## Worldmap
+
+```{r world_map}
+plotWorldmap()
+```
+
+`r display_worldmap_buttons()`
+
+## Top 10 Applications {.tabset}
+
+In the following the data was aggregated by application. The first figure pictures the sum of all calls of each application, while the second shows the number of unique users. The figures differentiate between individual and cluster calls/users. The term 'cluster calls/users' refers to IP addresses that were previously identified as part of a cluster, but left in the dataset as a representative for the corresponding cluster.
+
+### By Calls
+
+```{r top_10_calls}
+top_10_calls <- top_10_apps_calls()
+plot_files <- savePlots("top10_applications_by_calls_", top_10_calls)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+### By Users
+
+```{r top_10_users}
+top_10_users <- top_10_apps_users()
+plot_files <- savePlots("top10_applications_by_users_", top_10_users)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+## {.unlisted .unnumbered}
+
+## Operating System {.tabset}
+
+For an overview over the distribution of different operating systems the data was aggregated by column 'os'. As before, the first figure pictures the sum of all calls of each operating system, while the second shows the number of unique users.
+
+### By Calls
+
+```{r os_by_calls}
+operating_system_calls <- os_by_calls()
+plot_files <- savePlots("operating_system_distribution_by_calls_", operating_system_calls)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+### By Users
+
+```{r operating_system_users}
+operating_system_users <- os_by_users()
+plot_files <- savePlots("operating_system_distribution_by_users_", operating_system_users)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+## {.unlisted .unnumbered}
+
+## New Unique User Statistic {.tabset}
+
+The bar plots on the left display the unique new users. New Unique users means that each IP Adress tracked only appears once in this statistic at the time point of it's first occurence. The line plot on the right displays the same information as a line instead of bars. The red line on the left plot shows the cumulative sum of the new unique users.
+
+### Bar
+
+```{r unique_ips_bar}
+unique_ips <- new_unique_ips_per_month()
+plot_files <- savePlots("unique_new_users_per_month_bar_", unique_ips$bar)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+### Line
+
+```{r unique_ips_line}
+plot_files <- savePlots("unique_new_users_per_month_line_", unique_ips$line)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+## {.unlisted .unnumbered}
+
+## Unique User Statistic {.tabset}
+
+### Bar
+
+```{r unique_ips2_bar}
+unique_ips <- unique_ips_per_month()
+plot_files <- savePlots("unique_users_per_month_bar_", unique_ips$bar)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+### Line
+
+```{r unique_ips2_line}
+plot_files <- savePlots("unique_users_per_month_line_", unique_ips$line)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+## {.unlisted .unnumbered}
+
+## Total Calls Statistic {.tabset}
+
+For comparison the following plots show the toal counts of usages (calls) per month, accumulated and as a line plot.
+
+### Bar
+
+```{r total_ips_bar}
+total_ips <- total_ips_per_month()
+plot_files <- savePlots("total_calls_per_month_bar_", total_ips$bar)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+### Line
+
+```{r total_ips_line}
+plot_files <- savePlots("total_calls_per_month_line_", total_ips$line)
+```
+
+`r display_plot_with_buttons(plot_files)`
+
+## {.unlisted .unnumbered}
+
+## Distribution of Countries and Cities
+
+```{r contries_and_cities}
+contries_and_cities <- contries_and_cities_table()
+table_files <- saveTable("country_and_city_distribution_per_app_", contries_and_cities)
+```
+
+`r display_table_with_buttons(table_files)`
+
+## Daily and Weekly Usage
+
+```{r daily_and_weekly_usage}
+daily_and_weekly_usage <- daily_and_weekly_usage_table()
+table_files <- saveTable("daily_and_weekly_usage_per_app_", daily_and_weekly_usage)
+```
+
+`r display_table_with_buttons(table_files)`

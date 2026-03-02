@@ -1,0 +1,11 @@
+clickhouse-connect
+dask
+fsspec
+gql[all]
+intake
+intake-parquet
+IP2Location
+jinja2
+pandas
+python-dateutil
+s3fs

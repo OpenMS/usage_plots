@@ -1,0 +1,29 @@
+# This file is derived from:
+# https://github.com/anaconda/anaconda-package-data/blob/master/catalog/anaconda_package_data.yaml
+#
+# Original file by Anaconda, Inc.
+# Licensed under Creative Commons Attribution 4.0 International License
+# Repository: https://github.com/anaconda/anaconda-package-data
+#
+# Modifications:
+# - Removed unused sources
+# - Added s3fs filecache caching with configurable cache directory
+# - Removed deprecated cache section
+
+sources:
+  anaconda_package_data_by_year_month_res:
+    description: Conda package downloads for one year at monthly resolution.
+    driver: parquet
+    parameters:
+      year:
+        description: year
+        type: int
+        default: 2018
+        min: 2017
+    args:
+      urlpath: 'filecache::s3://anaconda-package-data/conda/monthly/{{ "%04d" | format(year) }}/{{ "%04d" | format(year) }}-*.parquet'
+      storage_options:
+          s3:
+            anon: true
+          filecache:
+            cache_storage: "{{ env(TMPDIR) or '/tmp' }}/s3fs_cache"

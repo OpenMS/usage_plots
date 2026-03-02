@@ -10,13 +10,17 @@ apt-get install --yes --no-install-recommends \
     gawk \
     libabsl-dev \
     libcairo2-dev \
+    libfribidi-dev \
     libgdal-dev \
+    libharfbuzz-dev \
     libpng-dev \
     libssl-dev \
     libudunits2-dev \
+    nano \
     pandoc \
     python-is-python3 \
     python3 \
+    python3-pip \
     r-base \
     r-base-dev \
     sshpass \

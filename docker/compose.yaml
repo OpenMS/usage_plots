@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2006-2025 Knut Reinert & Freie Universität Berlin
+# SPDX-FileCopyrightText: 2016-2025 Knut Reinert & MPI für molekulare Genetik
+# SPDX-License-Identifier: CC-BY-4.0
+
+services:
+  usage-plots:
+    image: ghcr.io/seqan/usage-plots
+    pull_policy: never
+    build:
+      context: .
+      additional_contexts:
+        config: ../scripts/config
