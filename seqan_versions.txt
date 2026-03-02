@@ -1,6 +1,6 @@
-seqan3	3.4.0
+seqan3	3.4.1
 seqan	2.5.2
-sharg	1.2.0
+sharg	1.2.2
 lambda	1.0.2
 lambda_indexer	1.0.2
 lara	2.0.1
