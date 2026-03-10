@@ -15,7 +15,7 @@ params:
 title: "`r paste(params$project, 'Usage Statistics')`"
 ---
 
-<script src="https://rawgit.com/rowanwins/leaflet-easyPrint/gh-pages/dist/bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2/dist/bundle.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 
