@@ -60,7 +60,7 @@ EXCLUDED_TERMS="test_version_check program_full_options empty_options default my
 EXCLUDE_PATTERN="_${EXCLUDED_TERMS// /_|_}_"
 
 # Process log file - breaking down the pipeline into more readable parts
-grep -E -v "${EXCLUDE_PATTERN}" "${RAW_DATA_FILE}" | \
+grep --binary-files=text -E -v "${EXCLUDE_PATTERN}" "${RAW_DATA_FILE}" | \
     perl -ne 's/^(\d+\.\d+\.\d+\.\d+)\s.*\[(\d+)\/([a-zA-Z]+)\/(\d+).*\] "GET \/check\/([^_]+(?:_[a-zA-Z]+)?)_([a-zA-Z]+)_(\d+)_([a-zA-Z0-9_]+)_(\d+\.\d+\.\d+).*/$4-$3-$2\t$1\t$8\t$9\t$7\t$6\t$5/ && print' | \
     sort -n | \
     uniq | \
