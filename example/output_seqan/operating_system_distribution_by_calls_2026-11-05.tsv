@@ -1,0 +1,5 @@
+"os"	"count"	"percentage"	"label"	"pos"
+"Linux"	3285	99.1	"Linux (99.1%)"	1673.5
+"FreeBSD"	13	0.4	"FreeBSD (0.4%)"	24.5
+"MacOS"	11	0.3	"MacOS (0.3%)"	12.5
+"Windows"	7	0.2	"Windows (0.2%)"	3.5
