@@ -31,6 +31,9 @@ def get_org_repos(client: Client, owner: str, verbose: bool = False) -> List[str
     cursor = None
     has_more = True
 
+    if not client:
+        return repo_names
+
     while has_more:
         variables = {
             "owner": owner,
