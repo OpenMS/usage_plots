@@ -35,7 +35,7 @@ jobs:
 
       - name: Build image
         working-directory: ./docker
-        run: docker build . &> ${{ runner.temp }}/build-${{ github.run_id }}.log
+        run: docker compose build &> ${{ runner.temp }}/build-${{ github.run_id }}.log
 
       - name: Upload log
         if: always()
