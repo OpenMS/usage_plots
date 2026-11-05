@@ -2,8 +2,10 @@ log_data_new <- read.table(log_file_name, sep = "\t",
                            fill = T, header = T, quote = "",
                            stringsAsFactors = F)
 
+# "NA" is the country code of Namibia, not a missing value.
 geolocations <- read.table(geo_loc_file_name, sep = "\t",
                            fill = T, header = T, quote = "",
+                           na.strings = character(),
                            stringsAsFactors = F)
 
 global_logdata <- merge(log_data_new, geolocations, by="ip")
