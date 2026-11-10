@@ -58,7 +58,7 @@ def fetch_all_issues(client: Client, owner: str, repo: str, since_date: datetime
     prs_query = gql("""
         query($owner: String!, $repo: String!, $cursor: String) {
             repository(owner: $owner, name: $repo) {
-                pullRequests(first: 100, after: $cursor, orderBy: {field: CREATED_AT, direction: DESC}) {
+                pullRequests(first: 100, after: $cursor, orderBy: {field: UPDATED_AT, direction: DESC}) {
                     pageInfo {
                         hasNextPage
                         endCursor
@@ -66,6 +66,7 @@ def fetch_all_issues(client: Client, owner: str, repo: str, since_date: datetime
                     nodes {
                         createdAt
                         closedAt
+                        updatedAt
                         state
                     }
                 }
@@ -117,6 +118,12 @@ def fetch_all_issues(client: Client, owner: str, repo: str, since_date: datetime
         result = client.execute(prs_query, variable_values=variables)
 
         for pr in result['repository']['pullRequests']['nodes']:
+            # Opening or closing a PR updates it. PRs are ordered by update date descending, so once a PR was
+            # last updated before since_date, neither it nor any following PR was opened or closed since then.
+            if datetime.fromisoformat(pr['updatedAt']) < since_date:
+                prs_has_more = False
+                break
+
             created_at = datetime.fromisoformat(pr['createdAt'])
             closed_at = datetime.fromisoformat(pr['closedAt']) if pr['closedAt'] else None
 
@@ -130,10 +137,6 @@ def fetch_all_issues(client: Client, owner: str, repo: str, since_date: datetime
                     'closed_at': closed_at.astimezone(BERLIN_TZ) if closed_at else None,
                     'is_pr': True
                 })
-            elif created_at < since_date:
-                # Since PRs are ordered by creation date descending, stop when we reach old PRs
-                prs_has_more = False
-                break
 
         if prs_has_more:
             page_info = result['repository']['pullRequests']['pageInfo']
