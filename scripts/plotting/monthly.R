@@ -1,5 +1,5 @@
 # Generic function to create monthly metric plots
-create_monthly_plots <- function(plot_data, y_col, cumulative_col,
+create_monthly_plots <- function(view, plot_data, y_col, cumulative_col,
                                 title, y_axis_label, cumulative_label) {
 
   # Calculate scale factor
@@ -10,7 +10,7 @@ create_monthly_plots <- function(plot_data, y_col, cumulative_col,
     geom_col(aes(x = Month, y = .data[[y_col]]), fill = "lightblue") +
     geom_step(aes(x = Month, y = .data[[cumulative_col]]/scale_factor, group = 1),
               color = "red", linewidth = 1) +
-    scale_x_date(limits = c(as.Date(MIN_DATE + 30), NA),
+    scale_x_date(limits = c(as.Date(view$min_date + 30), NA),
                 oob = scales::oob_keep,
                 date_labels = "%b %Y",
                 minor_breaks = "1 months",
@@ -32,7 +32,7 @@ create_monthly_plots <- function(plot_data, y_col, cumulative_col,
   p2 <- ggplot(plot_data) +
     geom_step(aes(x = Month, y = .data[[y_col]], group = 1), color = "blue", linewidth = 1) +
     labs(title = title, y = y_axis_label) +
-    scale_x_date(limits = c(as.Date(MIN_DATE + 30), NA),
+    scale_x_date(limits = c(as.Date(view$min_date + 30), NA),
                 oob = scales::oob_keep,
                 date_labels = "%b %Y",
                 minor_breaks = "1 months",
@@ -50,8 +50,8 @@ create_monthly_plots <- function(plot_data, y_col, cumulative_col,
 }
 
 # Update the three functions to use the generic implementation
-new_unique_ips_per_month <- function() {
-  plot_data <- global_logdata %>%
+new_unique_ips_per_month <- function(view) {
+  plot_data <- view$logdata %>%
     # Get unique users at their first call
     arrange(date) %>%
     filter(!duplicated(ip)) %>%
@@ -63,12 +63,13 @@ new_unique_ips_per_month <- function() {
     # Fill Missing Months
     mutate(Month = as.Date(paste0(Month, "-01"))) %>%
     complete(Month = seq(first(Month), last(Month), by = "month"), fill=list(New_Unique_Users=0)) %>%
-    # Remove last month
+    # Remove the last month
     slice(-n()) %>%
     # Add cumulative sum
     mutate(Cumulative_Users = cumsum(New_Unique_Users))
 
   return(create_monthly_plots(
+    view = view,
     plot_data = plot_data,
     y_col = "New_Unique_Users",
     cumulative_col = "Cumulative_Users",
@@ -78,8 +79,8 @@ new_unique_ips_per_month <- function() {
   ))
 }
 
-unique_ips_per_month <- function() {
-  plot_data <- global_logdata %>%
+unique_ips_per_month <- function(view) {
+  plot_data <- view$logdata %>%
     # Format date to year-month
     mutate(date = format(date, "%Y-%m")) %>%
     # Group by date and IP, sum calls for each combination
@@ -97,6 +98,7 @@ unique_ips_per_month <- function() {
     mutate(Cumulative_Users = cumsum(Unique_Users))
 
   return(create_monthly_plots(
+    view = view,
     plot_data = plot_data,
     y_col = "Unique_Users",
     cumulative_col = "Cumulative_Users",
@@ -106,8 +108,8 @@ unique_ips_per_month <- function() {
   ))
 }
 
-total_ips_per_month <- function() {
-  plot_data <- global_logdata %>%
+total_ips_per_month <- function(view) {
+  plot_data <- view$logdata %>%
     # Format date
     mutate(date = format(date, "%Y-%m")) %>%
     # Group and summarize
@@ -122,6 +124,7 @@ total_ips_per_month <- function() {
     mutate(Cumulative_Calls = cumsum(Total_Calls))
 
   return(create_monthly_plots(
+    view = view,
     plot_data = plot_data,
     y_col = "Total_Calls",
     cumulative_col = "Cumulative_Calls",

@@ -1,3 +1,41 @@
+# Rows of the tables per period: each full year from FIRST_YEAR on, the fourth quarter of the previous year to
+# the third quarter of the current year, and the current year.
+# First_Day and Last_Day are the dates that the periods span.
+get_quarter_ranges <- function()
+{
+  current_year <- CURRENT_YEAR
+  previous_year <- current_year - 1
+  full_years <- if (previous_year >= FIRST_YEAR) FIRST_YEAR:previous_year else integer(0)
+
+  data.frame(
+    Start = c(paste(full_years, "Q1"),
+              paste(previous_year, "Q4"),
+              paste(current_year, "Q1")),
+    Start_as_Date = c(full_years + 0.1,
+                      previous_year + 0.4,
+                      current_year + 0.1),
+    End = c(paste(full_years, "Q4"),
+            paste(current_year, "Q3"),
+            paste(current_year, "Q4")),
+    End_as_Date = c(full_years + 0.4,
+                    current_year + 0.3,
+                    current_year + 0.4),
+    First_Day = as.Date(c(paste0(full_years, "-01-01"),
+                          paste0(previous_year, "-10-01"),
+                          paste0(current_year, "-01-01"))),
+    Last_Day = as.Date(c(paste0(full_years, "-12-31"),
+                         paste0(current_year, "-09-30"),
+                         paste0(current_year, "-12-31"))),
+    stringsAsFactors = FALSE
+  )
+}
+
+# Markdown heading of the tab that shows `view`
+tab_heading <- function(view, tabset = FALSE)
+{
+  return(paste0("### ", view$label, if (tabset) " {.tabset}" else "", "\n\n"))
+}
+
 saveTable <- function(name, table)
 {
     table_basename_tsv <- paste0(name, CURRENT_DATE, ".tsv")

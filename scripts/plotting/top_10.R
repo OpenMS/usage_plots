@@ -1,4 +1,4 @@
-create_top_10_apps_plot <- function(data_to_plot, clustered, agg_type)
+create_top_10_apps_plot <- function(view, data_to_plot, clustered, agg_type)
 {
   firstup <- function(x) {
     substr(x, 1, 1) <- toupper(substr(x, 1, 1))
@@ -13,7 +13,7 @@ create_top_10_apps_plot <- function(data_to_plot, clustered, agg_type)
 
   if (clustered)
   {
-    plot_data$cluster_calls <- cluster_data[plot_data$app]
+    plot_data$cluster_calls <- view$cluster_data[plot_data$app]
     plot_legend <- c(paste("cluster",agg_type), paste("individual",agg_type))
     plot_colors <- c("#9ecae1", "#3182bd")
   }
@@ -39,18 +39,18 @@ create_top_10_apps_plot <- function(data_to_plot, clustered, agg_type)
   return(list(plot = plot, raw = plot_data))
 }
 
-top_10_apps_calls <- function(clustered = TRUE)
+top_10_apps_calls <- function(view, clustered = TRUE)
 {
-    plot_data <- aggregate(calls ~ app, data = global_logdata, sum)
-    return(create_top_10_apps_plot(plot_data, clustered, "calls"))
+    plot_data <- aggregate(calls ~ app, data = view$logdata, sum)
+    return(create_top_10_apps_plot(view, plot_data, clustered, "calls"))
 }
 
-top_10_apps_users <- function(clustered = TRUE)
+top_10_apps_users <- function(view, clustered = TRUE)
 {
-    plot_data <- global_logdata %>%
+    plot_data <- view$logdata %>%
                  select(ip, app) %>%
                  distinct() %>%
                  group_by(app) %>%
                  summarise(calls = n())
-    return(create_top_10_apps_plot(plot_data, clustered, "users"))
+    return(create_top_10_apps_plot(view, plot_data, clustered, "users"))
 }

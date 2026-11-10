@@ -25,9 +25,17 @@ All output is created in the current working directory:
 | `output_<project>/report.html`           | The dashboard                                                  |
 | `output_<project>/monthly_*_<date>.tsv`  | Statistics fetched in step 2                                   |
 | `output_<project>/*_<date>.{pdf,png,tsv}` | Plots and tables of the report                                |
+| `output_<project>/*_<year>_<date>.{pdf,png,tsv}` | Plots and tables of one year                                  |
+| `output_<project>/*_per_year_<date>.tsv` | Values per year of the plots over time                        |
 
 Keep the files in `output_<project>/` together: `report.html` embeds the plots, but its download buttons link to the individual files.
 Viewing the report requires an internet connection for the table library and the map tiles.
+
+The worldmap, the top 10 applications, the distribution of countries and cities, and the daily and weekly usage have a tab
+for all data of the log and a tab for each year from 2023 (`FIRST_YEAR` in `config/config.R`) to the current year.
+The tab of a year shows the report for a log that contains only the calls of this year; years without calls have no tab.
+The plots over time (general usage, new unique users, unique users, total calls) show all data and have a `TSV per year`
+with the same rows as the download tables (see below). There, a user counts as new in the period of their first call in the log.
 
 Step 2 skips a source if the file with the current date is already in `output_<project>/`.
 Running `run.sh` again on the same day therefore does not fetch the statistics again.
@@ -62,7 +70,8 @@ Data sources
 | Citations               | `plotting/citations.R`     | Google Scholar                                                               |
 | Geolocations            | `log_processing/get_ip_addresses.py` | Local database `../database/IP2LOCATION-LITE-DB5.BIN`              |
 
-The fetched statistics cover the current and the previous calendar year.
+The fetched statistics cover the years from 2023 (`FIRST_YEAR` in `config/config.R` and `data_processing/py/github_shared.py`) to the current year.
+The download and contribution tables show each full year from 2023 on, the fourth quarter of the previous year to the third quarter of the current year, and the current year.
 GitHub only reports a total per release, so a release's downloads are distributed evenly over the time until the next release (or one year for the latest release).
 
 GitHub token

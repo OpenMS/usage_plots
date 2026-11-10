@@ -4,26 +4,7 @@ get_aggregated_downloads <- function() {
   conda_data <- read_tsv(conda_downloads_file, col_types = cols())
   pypi_data <- read_tsv(pypi_downloads_file, col_types = cols())
 
-  # Get current and previous year for quarter ranges
-  current_year <- year(today())
-  previous_year <- current_year - 1
-
-  # Define the three quarter ranges
-  quarter_ranges <- data.frame(
-    Start = c(paste(previous_year, "Q1"),
-              paste(previous_year, "Q4"),
-              paste(current_year, "Q1")),
-    Start_as_Date = c(previous_year + 0.1,
-                      previous_year + 0.4,
-                      current_year + 0.1),
-    End = c(paste(previous_year, "Q4"),
-            paste(current_year, "Q3"),
-            paste(current_year, "Q4")),
-    End_as_Date = c(previous_year + 0.4,
-                    current_year + 0.3,
-                    current_year + 0.4),
-    stringsAsFactors = FALSE
-  )
+  quarter_ranges <- get_quarter_ranges()
 
   # Function to convert Month (YYYY-MM) to quarter
   add_quarter <- function(data) {

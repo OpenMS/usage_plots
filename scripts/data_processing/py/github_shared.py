@@ -68,7 +68,8 @@ def get_gql_client() -> Optional[Client]:
 BERLIN_TZ = ZoneInfo("Europe/Berlin")
 CURRENT_DATE = datetime.now(tz=BERLIN_TZ)
 CURRENT_YEAR = CURRENT_DATE.year
-PREVIOUS_YEAR = CURRENT_YEAR - 1
-START_DATE = datetime(year=PREVIOUS_YEAR, month=1, day=1, tzinfo=BERLIN_TZ)
+# The report shows each year from FIRST_YEAR to the current year. Keep FIRST_YEAR in sync with config/config.R.
+FIRST_YEAR = 2023
+START_DATE = datetime(year=FIRST_YEAR, month=1, day=1, tzinfo=BERLIN_TZ)
 END_DATE = datetime(year=CURRENT_YEAR, month=12, day=31, tzinfo=BERLIN_TZ)
 ALL_MONTHS = pd.period_range(start=START_DATE, end=END_DATE, freq='M')

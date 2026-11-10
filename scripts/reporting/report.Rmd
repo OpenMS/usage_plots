@@ -31,16 +31,18 @@ This is an automatically generated report that evaluates the current `r params$p
 
 <abbr title="Only works for Jenkins"><a href="*zip*/`r paste(params$project, CURRENT_DATE, sep='_')`.zip" download class="btn btn-info btn-dl" target="_blank">ZIP</a></abbr>
 
+`r if (length(YEAR_VIEWS) > 0) paste0("Sections with tabs show all data and, in a separate tab, each year since ", FIRST_YEAR, ". The plots over time have an additional TSV with the values per year.")`
+
 ## Timeframe
 
 | What  | Date             |
 |------:|:----------------:|
-| From  | `r MIN_DATE`     |
-| To    | `r MAX_DATE`     |
+| From  | `r VIEW_ALL$min_date` |
+| To    | `r VIEW_ALL$max_date` |
 | Today | `r CURRENT_DATE` |
 
-The timeframe spans `r floor(DIFF_TIME_WEEKS)` weeks and `r DIFF_TIME_DAYS - floor(DIFF_TIME_WEEKS) * 7` days.\
-This is equivalent to `r scales::comma(DIFF_TIME_DAYS)` days or `r format(DIFF_TIME_WEEKS, digits = 2, nsmall = 2)` weeks.
+The timeframe spans `r floor(VIEW_ALL$diff_time_weeks)` weeks and `r VIEW_ALL$diff_time_days - floor(VIEW_ALL$diff_time_weeks) * 7` days.\
+This is equivalent to `r scales::comma(VIEW_ALL$diff_time_days)` days or `r format(VIEW_ALL$diff_time_weeks, digits = 2, nsmall = 2)` weeks.
 
 ## The Data
 
@@ -114,41 +116,41 @@ table_files <- saveTable("github_contributions_", github)
 To display the general usage, the plot shows the cumulative usage of all application summed together over the given time period.
 
 ```{r general_usage}
-general_usage_plot <- general_usage(params$project)
+general_usage_plot <- general_usage(VIEW_ALL, params$project)
 plot_files <- savePlots("total_cumulative_sum_of_usages_", general_usage_plot)
+period_files <- saveTable("total_sum_of_usages_per_year_", general_usage_per_period(VIEW_ALL))
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
-## Worldmap
+## Worldmap {.tabset}
 
-```{r world_map}
-plotWorldmap()
+```{r world_map, results = "asis"}
+# The map is an htmlwidget; knitting it as a child document includes its dependencies.
+for (view in VIEWS) {
+  cat(tab_heading(view))
+  cat(knitr::knit_child(text = c("```{r}", "plotWorldmap(view)", "```"), envir = environment(), quiet = TRUE))
+  cat("\n\n", display_worldmap_buttons(view), sep = "")
+}
 ```
 
-`r display_worldmap_buttons()`
+## {.unlisted .unnumbered}
 
 ## Top 10 Applications {.tabset}
 
 In the following the data was aggregated by application. The first figure pictures the sum of all calls of each application, while the second shows the number of unique users. The figures differentiate between individual and cluster calls/users. The term 'cluster calls/users' refers to IP addresses that were previously identified as part of a cluster, but left in the dataset as a representative for the corresponding cluster.
 
-### By Calls
-
-```{r top_10_calls}
-top_10_calls <- top_10_apps_calls()
-plot_files <- savePlots("top10_applications_by_calls_", top_10_calls)
+```{r top_10, results = "asis"}
+for (view in VIEWS) {
+  cat(tab_heading(view, tabset = TRUE))
+  cat("#### By Calls\n\n")
+  plot_files <- savePlots(paste0("top10_applications_by_calls_", view$suffix), top_10_apps_calls(view))
+  cat(display_plot_with_buttons(plot_files), "\n\n")
+  cat("#### By Users\n\n")
+  plot_files <- savePlots(paste0("top10_applications_by_users_", view$suffix), top_10_apps_users(view))
+  cat(display_plot_with_buttons(plot_files), "\n\n")
+}
 ```
-
-`r display_plot_with_buttons(plot_files)`
-
-### By Users
-
-```{r top_10_users}
-top_10_users <- top_10_apps_users()
-plot_files <- savePlots("top10_applications_by_users_", top_10_users)
-```
-
-`r display_plot_with_buttons(plot_files)`
 
 ## {.unlisted .unnumbered}
 
@@ -159,7 +161,7 @@ For an overview over the distribution of different operating systems the data wa
 ### By Calls
 
 ```{r os_by_calls}
-operating_system_calls <- os_by_calls()
+operating_system_calls <- os_by_calls(VIEW_ALL)
 plot_files <- savePlots("operating_system_distribution_by_calls_", operating_system_calls)
 ```
 
@@ -168,7 +170,7 @@ plot_files <- savePlots("operating_system_distribution_by_calls_", operating_sys
 ### By Users
 
 ```{r operating_system_users}
-operating_system_users <- os_by_users()
+operating_system_users <- os_by_users(VIEW_ALL)
 plot_files <- savePlots("operating_system_distribution_by_users_", operating_system_users)
 ```
 
@@ -183,11 +185,12 @@ The bar plots on the left display the unique new users. New Unique users means t
 ### Bar
 
 ```{r unique_ips_bar}
-unique_ips <- new_unique_ips_per_month()
+unique_ips <- new_unique_ips_per_month(VIEW_ALL)
 plot_files <- savePlots("unique_new_users_per_month_bar_", unique_ips$bar)
+period_files <- saveTable("unique_new_users_per_year_", new_unique_users_per_period(VIEW_ALL))
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
 ### Line
 
@@ -195,7 +198,7 @@ plot_files <- savePlots("unique_new_users_per_month_bar_", unique_ips$bar)
 plot_files <- savePlots("unique_new_users_per_month_line_", unique_ips$line)
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
 ## {.unlisted .unnumbered}
 
@@ -204,11 +207,12 @@ plot_files <- savePlots("unique_new_users_per_month_line_", unique_ips$line)
 ### Bar
 
 ```{r unique_ips2_bar}
-unique_ips <- unique_ips_per_month()
+unique_ips <- unique_ips_per_month(VIEW_ALL)
 plot_files <- savePlots("unique_users_per_month_bar_", unique_ips$bar)
+period_files <- saveTable("unique_users_per_year_", unique_users_per_period(VIEW_ALL))
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
 ### Line
 
@@ -216,7 +220,7 @@ plot_files <- savePlots("unique_users_per_month_bar_", unique_ips$bar)
 plot_files <- savePlots("unique_users_per_month_line_", unique_ips$line)
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
 ## {.unlisted .unnumbered}
 
@@ -227,11 +231,12 @@ For comparison the following plots show the toal counts of usages (calls) per mo
 ### Bar
 
 ```{r total_ips_bar}
-total_ips <- total_ips_per_month()
+total_ips <- total_ips_per_month(VIEW_ALL)
 plot_files <- savePlots("total_calls_per_month_bar_", total_ips$bar)
+period_files <- saveTable("total_calls_per_year_", total_calls_per_period(VIEW_ALL))
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
 ### Line
 
@@ -239,24 +244,30 @@ plot_files <- savePlots("total_calls_per_month_bar_", total_ips$bar)
 plot_files <- savePlots("total_calls_per_month_line_", total_ips$line)
 ```
 
-`r display_plot_with_buttons(plot_files)`
+`r display_plot_with_buttons(plot_files, period_files)`
 
 ## {.unlisted .unnumbered}
 
-## Distribution of Countries and Cities
+## Distribution of Countries and Cities {.tabset}
 
-```{r contries_and_cities}
-contries_and_cities <- contries_and_cities_table()
-table_files <- saveTable("country_and_city_distribution_per_app_", contries_and_cities)
+```{r contries_and_cities, results = "asis"}
+for (view in VIEWS) {
+  cat(tab_heading(view))
+  table_files <- saveTable(paste0("country_and_city_distribution_per_app_", view$suffix), contries_and_cities_table(view))
+  cat(display_table_with_buttons(table_files), "\n\n")
+}
 ```
 
-`r display_table_with_buttons(table_files)`
+## {.unlisted .unnumbered}
 
-## Daily and Weekly Usage
+## Daily and Weekly Usage {.tabset}
 
-```{r daily_and_weekly_usage}
-daily_and_weekly_usage <- daily_and_weekly_usage_table()
-table_files <- saveTable("daily_and_weekly_usage_per_app_", daily_and_weekly_usage)
+The averages per day and week are based on the timeframe of each tab: all data, or the calls of the year.
+
+```{r daily_and_weekly_usage, results = "asis"}
+for (view in VIEWS) {
+  cat(tab_heading(view))
+  table_files <- saveTable(paste0("daily_and_weekly_usage_per_app_", view$suffix), daily_and_weekly_usage_table(view))
+  cat(display_table_with_buttons(table_files), "\n\n")
+}
 ```
-
-`r display_table_with_buttons(table_files)`

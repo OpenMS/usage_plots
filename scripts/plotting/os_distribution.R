@@ -15,9 +15,9 @@ create_os_distribution_plot <- function(data_to_plot, title_type)
     return(list(plot = operating_system, raw = data_to_plot))
 }
 
-os_by_calls <- function()
+os_by_calls <- function(view)
 {
-  os_counts <- global_logdata %>%
+  os_counts <- view$logdata %>%
     select(os) %>%
     group_by(os) %>%
     summarise(count = n()) %>%
@@ -35,9 +35,9 @@ os_by_calls <- function()
     return(create_os_distribution_plot(os_counts, "Calls"))
 }
 
-os_by_users <- function()
+os_by_users <- function(view)
 {
-  os_counts <- global_logdata %>%
+  os_counts <- view$logdata %>%
     select(ip, os) %>%
     distinct() %>%
     group_by(os) %>%

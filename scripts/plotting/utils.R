@@ -34,12 +34,17 @@ savePlots <- function(name, plot_data)
     return(result)
 }
 
-display_plot_with_buttons <- function(plot_files) {
+# `period_table_files` is the result of saveTable() for a table per period of the plotted data.
+display_plot_with_buttons <- function(plot_files, period_table_files = NULL) {
   image_html <- paste0('![](', plot_files$png$absolute, ')\n\n')
   buttons_html <- paste0(
     '<a href="', plot_files$pdf$basename, '" download class="btn btn-info btn-dl" target="_blank">PDF</a> ',
     '<a href="', plot_files$png$basename, '" download class="btn btn-info btn-dl" target="_blank">PNG</a> ',
     '<a href="', plot_files$tsv$basename, '" download class="btn btn-info btn-dl" target="_blank">TSV</a> '
   )
+  if (!is.null(period_table_files)) {
+    buttons_html <- paste0(buttons_html,
+      '<a href="', period_table_files$tsv$basename, '" download class="btn btn-info btn-dl" target="_blank">TSV per year</a> ')
+  }
   return(paste0(image_html, buttons_html))
 }

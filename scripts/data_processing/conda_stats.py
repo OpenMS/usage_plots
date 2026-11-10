@@ -13,7 +13,7 @@ project_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(project_root))
 
 from scripts.config.config import PACKAGE_INFO
-from scripts.data_processing.py.github_shared import BERLIN_TZ, ALL_MONTHS
+from scripts.data_processing.py.github_shared import BERLIN_TZ, ALL_MONTHS, START_DATE, END_DATE
 
 # Valid project names with canonical spelling
 VALID_PROJECTS = {
@@ -63,13 +63,9 @@ def fetch_conda_downloads(package_names: List[str], verbose: bool = False) -> pd
     catalog_path = project_root / "scripts" / "config" / "package_data.yaml"
     cat = intake.open_catalog(str(catalog_path))
 
-    # Get current year and previous year
-    current_year = datetime.now(tz=BERLIN_TZ).year
-    previous_year = current_year - 1
-
-    # Fetch data for both years
+    # Fetch every year from START_DATE to END_DATE
     dfs = []
-    for year in [previous_year, current_year]:
+    for year in range(START_DATE.year, END_DATE.year + 1):
         if verbose:
             print(f"Fetching data for year {year}...")
 
@@ -87,7 +83,7 @@ def fetch_conda_downloads(package_names: List[str], verbose: bool = False) -> pd
 
         dfs.append(df)
 
-    # Combine both years
+    # Combine all years
     df = pd.concat(dfs, ignore_index=True)
 
     if verbose:

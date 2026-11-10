@@ -1,5 +1,5 @@
-general_usage <- function(project) {
-  plot_data <- global_logdata %>%
+general_usage <- function(view, project) {
+  plot_data <- view$logdata %>%
     mutate(DevelopedBy = ifelse(DevelopedBy == "denbi", "de.NBI", DevelopedBy)) %>%
     # Group by DevelopedBy and date, calculate sum of calls
     group_by(DevelopedBy, date) %>%
@@ -23,7 +23,7 @@ general_usage <- function(project) {
     common_theme +
     geom_area(aes(colour = DevelopedBy, fill = DevelopedBy),
               colour = "black", linewidth = .3, alpha = .7) +
-    scale_x_date(limits = c(as.Date(MIN_DATE + 30), NA),
+    scale_x_date(limits = c(as.Date(view$min_date + 30), NA),
                 oob = scales::oob_keep,
                 date_labels = "%b %Y",
                 minor_breaks = "1 months",

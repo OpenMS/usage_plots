@@ -1,13 +1,23 @@
-prepare_data_for_worldmap <- function()
+# Suffix of the HTML ids of the map and its buttons
+worldmap_id_suffix <- function(view)
 {
+    if (view$suffix == "") {
+        return("")
+    }
+    return(paste0("_", sub("_$", "", view$suffix)))
+}
+
+prepare_data_for_worldmap <- function(view)
+{
+    logdata <- view$logdata
     # ------------------------- add html text for info popup ------------------
-    mapdata <- aggregate(global_logdata$calls, list(global_logdata$latitude,
-                                                         global_logdata$longitude,
-                                                         global_logdata$country,
-                                                         global_logdata$city), sum)
-    mapdata_aggr_by_app <- aggregate(global_logdata$calls, list(global_logdata$latitude,
-                                                         global_logdata$longitude,
-                                                         global_logdata$app), sum)
+    mapdata <- aggregate(logdata$calls, list(logdata$latitude,
+                                                  logdata$longitude,
+                                                  logdata$country,
+                                                  logdata$city), sum)
+    mapdata_aggr_by_app <- aggregate(logdata$calls, list(logdata$latitude,
+                                                              logdata$longitude,
+                                                              logdata$app), sum)
     colnames(mapdata) <- c("lat", "lng", "country", "city", "radius_size")
     colnames(mapdata_aggr_by_app) <- c("lat", "lng", "app", "calls")
     mapdata <- mapdata[order(mapdata$lat),]
@@ -78,14 +88,14 @@ prepare_data_for_worldmap <- function()
     return(mapdata)
 }
 
-plotWorldmap <- function()
+plotWorldmap <- function(view)
 {
-    mapdata <- prepare_data_for_worldmap()
+    mapdata <- prepare_data_for_worldmap(view)
     return(
         leaflet(mapdata,
                 width="960px",
                 height="540px",
-                elementId="leaflet-worldmap",
+                elementId=paste0("leaflet-worldmap", worldmap_id_suffix(view)),
                 options = leafletOptions(zoomControl = TRUE,
                                          zoomSnap = 0.05,
                                          zoomDelta = 0.05,
@@ -99,33 +109,35 @@ plotWorldmap <- function()
                          popup = ~infotext) %>%
         mapOptions(zoomToLimits = "always") %>%
         onRender("function(el, x) {
-            const $divMap = $('#leaflet-worldmap');
-            const map = $divMap[0].htmlwidget_data_init_result.getMap();
-            map.original_bounds = map.getBounds();
+            const map = el.htmlwidget_data_init_result.getMap();
+            // A map in a hidden tab gets its view only when the tab is shown
+            map.whenReady(function() {
+              map.original_bounds = map.getBounds();
 
-            map.printPlugin = L.easyPrint({
-              title: 'My awesome print button',
-              exportOnly: true,
-              hidden: true,
-              position: 'bottomright',
-              sizeModes: ['Current', 'A4Portrait', 'A4Landscape']
-            }).addTo(map);
+              map.printPlugin = L.easyPrint({
+                title: 'My awesome print button',
+                exportOnly: true,
+                hidden: true,
+                position: 'bottomright',
+                sizeModes: ['Current', 'A4Portrait', 'A4Landscape']
+              }).addTo(map);
+            });
         }")
     )
 }
 
-display_worldmap_buttons <- function()
+display_worldmap_buttons <- function(view)
 {
   button_html <- r"(
-  <abbr title="Temporarily resizes the map to 1920x1080px. The downloaded file might be blurry. In this case, the tiles were not loaded fully. It usually works the second time."><button id="btn_export" type="button" class="btn btn-info btn-dl">Resized</button></abbr>
-  <button id="btn_export2" type="button" class="btn btn-info btn-dl">As shown</button>
-  <button id="btn_reset" type="button" class="btn btn-info btn-dl btn-reset">Reset view</button>
+  <abbr title="Temporarily resizes the map to 1920x1080px. The downloaded file might be blurry. In this case, the tiles were not loaded fully. It usually works the second time."><button id="btn_export@ID@" type="button" class="btn btn-info btn-dl">Resized</button></abbr>
+  <button id="btn_export2@ID@" type="button" class="btn btn-info btn-dl">As shown</button>
+  <button id="btn_reset@ID@" type="button" class="btn btn-info btn-dl btn-reset">Reset view</button>
   )"
 
   button_script_part1 <- r"(
   <script>
-  $('#btn_export').click(function (e){
-    const $divMap = $('#leaflet-worldmap');
+  $('#btn_export@ID@').click(function (e){
+    const $divMap = $('#leaflet-worldmap@ID@');
     const map = $divMap[0].htmlwidget_data_init_result.getMap();
     $divMap.width(1920);
     $divMap.height(1080);
@@ -142,20 +154,20 @@ display_worldmap_buttons <- function()
       });
       setTimeout(() => {
         map.printPlugin.printMap('CurrentSize', ')"
-  # paste0("worldmap_", CURRENT_DATE, "_1920x1080")
+  # paste0("worldmap_", view$suffix, CURRENT_DATE, "_1920x1080")
   button_script_part2 <- r"(');
       }, 1500);
     });
   });
-  $('#btn_export2').click(function (e){
-    const $divMap = $('#leaflet-worldmap');
+  $('#btn_export2@ID@').click(function (e){
+    const $divMap = $('#leaflet-worldmap@ID@');
     const map = $divMap[0].htmlwidget_data_init_result.getMap();
     map.printPlugin.printMap('CurrentSize', ')"
-  # paste0("worldmap_", CURRENT_DATE, "_960x540")
+  # paste0("worldmap_", view$suffix, CURRENT_DATE, "_960x540")
   button_script_part3 <- r"(');
   });
-  $('#btn_reset').click(function (e){
-    const $divMap = $('#leaflet-worldmap');
+  $('#btn_reset@ID@').click(function (e){
+    const $divMap = $('#leaflet-worldmap@ID@');
     const map = $divMap[0].htmlwidget_data_init_result.getMap();
     map.fitBounds(map.original_bounds);
   });
@@ -163,10 +175,14 @@ display_worldmap_buttons <- function()
   )"
 
   button_script <- paste0(button_script_part1,
-                          paste0("worldmap_", CURRENT_DATE, "_1920x1080"),
+                          paste0("worldmap_", view$suffix, CURRENT_DATE, "_1920x1080"),
                           button_script_part2,
-                          paste0("worldmap_", CURRENT_DATE, "_960x540"),
+                          paste0("worldmap_", view$suffix, CURRENT_DATE, "_960x540"),
                           button_script_part3)
+
+  id_suffix <- worldmap_id_suffix(view)
+  button_html <- gsub("@ID@", id_suffix, button_html, fixed = TRUE)
+  button_script <- gsub("@ID@", id_suffix, button_script, fixed = TRUE)
 
   return(paste0(button_html, "\n\n", button_script, "\n\n"))
 }
