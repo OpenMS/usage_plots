@@ -4,6 +4,7 @@ set -euo pipefail
 
 # Get the full path to this bash script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+REPO_DIR="$(cd "${SCRIPT_DIR}/.." &> /dev/null && pwd)"
 
 # Validate arguments
 if [[ $# -ne 1 ]]; then
@@ -12,7 +13,7 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 
-LOG_FILE="$1"
+LOG_FILE="$(readlink -m "$1")"
 
 # Validate log file exists
 if [[ ! -f "${LOG_FILE}" ]]; then
@@ -22,14 +23,14 @@ fi
 
 # Extract project name from log file
 PROJECT="$(basename "${LOG_FILE}" | cut -f 1 -d '-')"
-INTERMEDIATE_OUTPUT_DIR="intermediate_output_${PROJECT}"
-OUTPUT_DIR="output_${PROJECT}"
+INTERMEDIATE_OUTPUT_DIR="${PWD}/intermediate_output_${PROJECT}"
+OUTPUT_DIR="${PWD}/output_${PROJECT}"
 
 # Determine tooltag file based on project
 if [[ "${PROJECT,,}" == "seqan" ]]; then
-    TOOLTAG_FILE="${SCRIPT_DIR}/../tooltags/seqan_tooltags.tsv"
+    TOOLTAG_FILE="${REPO_DIR}/tooltags/seqan_tooltags.tsv"
 elif [[ "${PROJECT,,}" == "openms" ]]; then
-    TOOLTAG_FILE="${SCRIPT_DIR}/../tooltags/openms_tooltags.tsv"
+    TOOLTAG_FILE="${REPO_DIR}/tooltags/openms_tooltags.tsv"
 else
     echo "Error: Could not determine project from log file name: ${LOG_FILE}" >&2
     echo "Expected filename to start with 'seqan-' or 'openms-'" >&2
@@ -100,6 +101,10 @@ echo "--- Creating report..."
     "${SCRIPT_DIR}/reporting/report.Rmd" \
     "${OUTPUT_DIR}" \
     "${TOOLTAG_FILE}"
+
+if [[ -f "${OUTPUT_DIR}/report.html" && ! -f "${OUTPUT_DIR}/index.html" ]]; then
+    ln -s "${OUTPUT_DIR}/report.html" "${OUTPUT_DIR}/index.html"
+fi
 
 echo ""
 echo "============================================================================="
