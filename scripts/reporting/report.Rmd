@@ -129,9 +129,10 @@ period_files <- saveTable("total_sum_of_usages_per_year_", general_usage_per_per
 # The map is an htmlwidget; knitting it as a child document includes its dependencies.
 for (view in VIEWS) {
   cat(tab_heading(view))
-  cat(knitr::knit_child(text = c("```{r}", "plotWorldmap(view)", "```"), envir = environment(), quiet = TRUE))
+  cat(knitr::knit_child(text = c("```{r}", "plotWorldmap(view, VIEW_ALL)", "```"), envir = environment(), quiet = TRUE))
   cat("\n\n", display_worldmap_buttons(view), sep = "")
 }
+cat(worldmap_sync_script(), "\n\n")
 ```
 
 ## {.unlisted .unnumbered}

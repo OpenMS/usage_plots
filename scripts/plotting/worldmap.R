@@ -88,9 +88,24 @@ prepare_data_for_worldmap <- function(view)
     return(mapdata)
 }
 
-plotWorldmap <- function(view)
+# Bounding box of the calls of `view`, like leaflet's zoomToLimits computes it from the markers
+worldmap_limits <- function(view)
+{
+    limits <- list(lat = range(view$logdata$latitude), lng = range(view$logdata$longitude))
+    # leaflet pads a bounding box of size 0
+    for (axis in c("lat", "lng")) {
+        if (limits[[axis]][1] == limits[[axis]][2]) {
+            limits[[axis]] <- limits[[axis]] + c(-0.006, 0.006)
+        }
+    }
+    return(limits)
+}
+
+# The map shows the calls of `view` and initially fits the bounding box of the calls of `bounds_view`.
+plotWorldmap <- function(view, bounds_view = view)
 {
     mapdata <- prepare_data_for_worldmap(view)
+    limits <- worldmap_limits(bounds_view)
     return(
         leaflet(mapdata,
                 width="960px",
@@ -107,7 +122,7 @@ plotWorldmap <- function(view)
                          color = "blue",
                          fill = T,
                          popup = ~infotext) %>%
-        mapOptions(zoomToLimits = "always") %>%
+        fitBounds(limits$lng[1], limits$lat[1], limits$lng[2], limits$lat[2]) %>%
         onRender("function(el, x) {
             const map = el.htmlwidget_data_init_result.getMap();
             // A map in a hidden tab gets its view only when the tab is shown
@@ -124,6 +139,35 @@ plotWorldmap <- function(view)
             });
         }")
     )
+}
+
+# The maps in the tabs show the same area: when a tab is shown, its map takes over the center and zoom of the
+# map in the previous tab. Only the visible map changes, so hidden maps do not load tiles.
+worldmap_sync_script <- function()
+{
+  return(r"(
+  <script>
+  (function() {
+    function worldmap(link) {
+      const el = $($(link).attr('href')).find('.leaflet.html-widget[id^="leaflet-worldmap"]')[0];
+      return el ? el.htmlwidget_data_init_result.getMap() : null;
+    }
+    let view = null;
+    // The previous tab is still visible
+    $(document).on('show.bs.tab', function(e) {
+      const from = worldmap(e.relatedTarget);
+      view = from && from._loaded ? {center: from.getCenter(), zoom: from.getZoom()} : null;
+    });
+    $(document).on('shown.bs.tab', function(e) {
+      const to = worldmap(e.target);
+      if (view && to && to._loaded) {
+        to.setView(view.center, view.zoom, {animate: false});
+      }
+      view = null;
+    });
+  })();
+  </script>
+  )")
 }
 
 display_worldmap_buttons <- function(view)
