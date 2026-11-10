@@ -52,7 +52,8 @@ create_monthly_plots <- function(plot_data, y_col, cumulative_col,
 # Update the three functions to use the generic implementation
 new_unique_ips_per_month <- function() {
   plot_data <- global_logdata %>%
-    # Get unique users
+    # Get unique users at their first call
+    arrange(date) %>%
     filter(!duplicated(ip)) %>%
     # Format date
     mutate(date = format(date, "%Y-%m")) %>%
