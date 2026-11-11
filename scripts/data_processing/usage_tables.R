@@ -8,7 +8,9 @@ contries_and_cities_table <- function(view)
     arrange(app, -country_calls) %>%
     slice(1)
 
+  # Cities with the same name in different regions or countries are different cities
   city <- view$logdata %>%
+    mutate(city = paste0(city, " (", region, ", ", country, ")")) %>%
     group_by(city, app) %>%
     summarise(city_calls = n(), .groups = "drop") %>%
     group_by(app) %>%

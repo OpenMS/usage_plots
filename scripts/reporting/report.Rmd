@@ -314,7 +314,7 @@ plot_files <- savePlots("total_calls_per_month_line_", total_ips$line)
 ## Distribution of Countries and Cities {.tabset}
 
 For each application, the number of countries and cities with a call, and the country and the city with the most calls.
-Cities are distinguished by name only.
+Cities are distinguished by name, region and country, and shown as *City (Region, Country)*.
 
 ```{r contries_and_cities, results = "asis"}
 for (view in VIEWS) {
