@@ -8,7 +8,7 @@ A small example of the input and output of [`scripts/run.sh`](../scripts/README.
 | `seqan-example.log` | 10,000 lines of the SeqAn version check log              |
 | `output_seqan/`     | Output for this log, `output_seqan/index.html` opens the dashboard |
 
-To view the dashboard, check out the repository and open `output_seqan/index.html` in a browser.
+To view the dashboard, check out the repository and open `output_seqan/index.html` in a browser, or visit https://eseiler.github.io/usage_plots.
 
 The log is randomized
 ---------------------

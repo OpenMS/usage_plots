@@ -20,18 +20,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'eseiler' || github.event_name == 'workflow_dispatch'
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
           path: example/output_seqan/
-          
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

@@ -46,6 +46,7 @@ Creating a dashboard
    With `--local`, its ZIP button links an archive of the output, `output_seqan/SeqAn_<date>.zip`.
 
 [example/output_seqan/](example/output_seqan/) contains the result of these commands.
+To view the example dashboard, visit https://eseiler.github.io/usage_plots.
 
 To change which GitHub repositories and conda/PyPI packages are counted as libraries or apps, edit `scripts/config/config.py`.
 [scripts/README.md](scripts/README.md) describes the configuration, the individual steps and the output.
