@@ -1,0 +1,17 @@
+"app"	"name"	"value"
+"lambda3"	"calls"	1
+"lambda3"	"cluster_calls"	0
+"lara"	"calls"	1
+"lara"	"cluster_calls"	0
+"needle"	"calls"	1
+"needle"	"cluster_calls"	0
+"yara_indexer"	"calls"	1
+"yara_indexer"	"cluster_calls"	0
+"GenMap"	"calls"	2
+"GenMap"	"cluster_calls"	0
+"flexbar"	"calls"	2
+"flexbar"	"cluster_calls"	0
+"yara_mapper"	"calls"	5
+"yara_mapper"	"cluster_calls"	0
+"razers3"	"calls"	38
+"razers3"	"cluster_calls"	1

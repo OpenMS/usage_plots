@@ -1,0 +1,42 @@
+"Application"	"Countries"	"Cities"	"Country_with_most_calls"	"Calls_from_Country"	"City_with_most_calls"	"Calls_from_City"
+"razers3"	35	138	"United States of America"	171	"Ashburn (Virginia, United States of America)"	29
+"yara_indexer"	11	18	"Japan"	11	"Tokyo (Tokyo, Japan)"	11
+"yara_mapper"	9	14	"Japan"	12	"Tokyo (Tokyo, Japan)"	12
+"GenMap"	7	12	"Japan"	6	"Tokyo (Tokyo, Japan)"	6
+"flexbar"	6	11	"United States of America"	9	"Columbus (Ohio, United States of America)"	4
+"mason_simulator"	4	5	"United States of America"	2	"Arlington (Virginia, United States of America)"	1
+"RLM"	3	3	"Japan"	4	"Tokyo (Tokyo, Japan)"	4
+"adaptFinder"	3	3	"China"	1	"Nanjing (Jiangsu, China)"	1
+"Raptor"	2	4	"United States of America"	6	"North Bergen (New Jersey, United States of America)"	4
+"lambda2"	2	2	"Russian Federation"	1	"Honolulu (Hawaii, United States of America)"	1
+"mason_variator"	2	2	"Korea (the Republic of)"	1	"Cumming (Georgia, United States of America)"	1
+"needle"	2	2	"Spain"	38	"Vigo (Galicia, Spain)"	38
+"ovgraphbuild"	2	2	"United States of America"	2	"Detroit (Michigan, United States of America)"	2
+"seqan_tcoffee"	2	2	"Italy"	1	"Fontana Liri (Lazio, Italy)"	1
+"MergeBam"	1	1	"China"	1	"Hangzhou (Zhejiang, China)"	1
+"Penguin_Parade"	1	1	"Mexico"	1	"Mexico City (Ciudad de Mexico, Mexico)"	1
+"Search"	1	1	"Singapore"	1	"Singapore (Singapore, Singapore)"	1
+"Test"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"alf"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"compute_gain"	1	1	"Netherlands (Kingdom of the)"	1	"Amsterdam (Noord-Holland, Netherlands (Kingdom of the))"	1
+"customgenomegenerator"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"dfi"	1	1	"Italy"	1	"Milan (Lombardia, Italy)"	1
+"fiona"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"fx_bam_coverage"	1	1	"Brazil"	1	"Franca (Sao Paulo, Brazil)"	1
+"gustaf_mate_joining"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"ibf_bitscore"	1	1	"Argentina"	1	"Salta (Salta, Argentina)"	1
+"insegt"	1	3	"United States of America"	3	"Denver (Colorado, United States of America)"	1
+"lambda"	1	1	"United States of America"	1	"Bellevue (Washington, United States of America)"	1
+"lambda3"	1	1	"Switzerland"	4	"Zurich (Zurich, Switzerland)"	4
+"lambda_indexer"	1	1	"United States of America"	1	"Honolulu (Hawaii, United States of America)"	1
+"mason_genome"	1	1	"United States of America"	1	"Durham (North Carolina, United States of America)"	1
+"mason_materializer"	1	1	"United States of America"	1	"Bellevue (Washington, United States of America)"	1
+"minions"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"my_program"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"pizzly"	1	1	"United States of America"	1	"Honolulu (Hawaii, United States of America)"	1
+"rabema_build_gold_standard"	1	1	"United States of America"	1	"Cupertino (California, United States of America)"	1
+"rabema_evaluate"	1	1	"Russian Federation"	1	"Chita (Zabaykal'skiy kray, Russian Federation)"	1
+"rabema_prepare_sam"	1	1	"Italy"	1	"Fontana Liri (Lazio, Italy)"	1
+"sam2matrix"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"st_index_search"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"stellar"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1

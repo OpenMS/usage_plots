@@ -40,9 +40,10 @@ Creating a dashboard
    It calls the individual steps sequentially and creates all output in the current working directory.
    ```console
    $ mkdir -p local/report && cd local/report # `local` is ignored by git
-   $ ../../scripts/run.sh ../../example/seqan-example.log
+   $ ../../scripts/run.sh --local ../../example/seqan-example.log
    ```
    `output_seqan/index.html` opens the dashboard, `output_seqan/report_<date>.html`.
+   With `--local`, its ZIP button links an archive of the output, `output_seqan/SeqAn_<date>.zip`.
 
 [example/output_seqan/](example/output_seqan/) contains the result of these commands.
 

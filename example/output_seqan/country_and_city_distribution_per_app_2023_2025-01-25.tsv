@@ -1,0 +1,41 @@
+"Application"	"Countries"	"Cities"	"Country_with_most_calls"	"Calls_from_Country"	"City_with_most_calls"	"Calls_from_City"
+"razers3"	36	117	"United States of America"	164	"Ashburn (Virginia, United States of America)"	33
+"yara_mapper"	9	15	"United States of America"	14	"Tokyo (Tokyo, Japan)"	10
+"flexbar"	8	13	"United States of America"	13	"Columbus (Ohio, United States of America)"	6
+"GenMap"	7	8	"Japan"	3	"Tokyo (Tokyo, Japan)"	3
+"RLM"	7	8	"United States of America"	2	"Bern (Bern, Switzerland)"	1
+"yara_indexer"	6	10	"Japan"	12	"Tokyo (Tokyo, Japan)"	11
+"mason_simulator"	5	9	"United States of America"	5	"Detroit (Michigan, United States of America)"	1
+"adaptFinder"	4	4	"China"	1	"Fontana Liri (Lazio, Italy)"	1
+"mason_genome"	3	3	"China"	1	"Beijing (Beijing, China)"	1
+"Indexer"	2	2	"Switzerland"	1	"North Bergen (New Jersey, United States of America)"	1
+"Penguin_Parade"	2	2	"Switzerland"	1	"North Bergen (New Jersey, United States of America)"	1
+"Raptor"	2	2	"United States of America"	4	"North Bergen (New Jersey, United States of America)"	4
+"lambda_indexer"	2	2	"Chile"	2	"Santiago (Region Metropolitana de Santiago, Chile)"	2
+"lara"	2	2	"China"	1	"Columbus (Ohio, United States of America)"	1
+"needle"	2	2	"Spain"	30	"Vigo (Galicia, Spain)"	30
+"HmnTrimmer"	1	1	"Hong Kong"	1	"Hong Kong (Hong Kong, Hong Kong)"	1
+"alf"	1	1	"United States of America"	3	"North Bergen (New Jersey, United States of America)"	3
+"casbar"	1	2	"United States of America"	2	"Madison (Wisconsin, United States of America)"	1
+"compute_gain"	1	1	"United Kingdom of Great Britain and Northern Ireland"	1	"Newport (Wales, United Kingdom of Great Britain and Northern Ireland)"	1
+"customgenomegenerator"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"fiona"	1	1	"United States of America"	1	"Carlsbad (California, United States of America)"	1
+"fx_bam_coverage"	1	1	"Italy"	1	"Milan (Lombardia, Italy)"	1
+"insegt"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"lambda"	1	1	"United States of America"	1	"Blue Bell (Pennsylvania, United States of America)"	1
+"lambda3"	1	1	"Switzerland"	2	"Zurich (Zurich, Switzerland)"	2
+"mason_frag_sequencing"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"mason_variator"	1	1	"Netherlands (Kingdom of the)"	1	"Amsterdam (Noord-Holland, Netherlands (Kingdom of the))"	1
+"mhc"	1	1	"Taiwan (Province of China)"	1	"Taipei (Taipei, Taiwan (Province of China))"	1
+"micro_razers"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"minions"	1	1	"Switzerland"	3	"Zurich (Zurich, Switzerland)"	3
+"my_program"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"mygit"	1	1	"Switzerland"	1	"Zurich (Zurich, Switzerland)"	1
+"ovgraphbuild"	1	1	"Colombia"	1	"Bogota (Distrito Capital de Bogota, Colombia)"	1
+"rabema_prepare_sam"	1	1	"Netherlands (Kingdom of the)"	1	"Amsterdam (Noord-Holland, Netherlands (Kingdom of the))"	1
+"sam2matrix"	1	1	"United States of America"	1	"Coppell (Texas, United States of America)"	1
+"samcat"	1	1	"United States of America"	1	"North Bergen (New Jersey, United States of America)"	1
+"slimm"	1	1	"Korea (the Republic of)"	1	"Seongnam (Gyeonggi-do, Korea (the Republic of))"	1
+"snp_store"	1	2	"United States of America"	2	"Madison (Wisconsin, United States of America)"	1
+"stellar"	1	2	"United States of America"	3	"North Bergen (New Jersey, United States of America)"	2
+"valik"	1	1	"United States of America"	1	"Atlanta (Georgia, United States of America)"	1

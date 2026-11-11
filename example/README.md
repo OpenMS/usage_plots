@@ -6,9 +6,9 @@ A small example of the input and output of [`scripts/run.sh`](../scripts/README.
 | Path                | Content                                                  |
 |---------------------|----------------------------------------------------------|
 | `seqan-example.log` | 10,000 lines of the SeqAn version check log              |
-| `output_seqan/`     | Output for this log, `output_seqan/report.html` is the dashboard |
+| `output_seqan/`     | Output for this log, `output_seqan/index.html` opens the dashboard |
 
-To view the dashboard, check out the repository and open `output_seqan/report.html` in a browser.
+To view the dashboard, check out the repository and open `output_seqan/index.html` in a browser.
 
 The log is randomized
 ---------------------
@@ -26,7 +26,7 @@ This keeps the merging of calls and the detection of clusters meaningful, see [L
 The remainder of each line is unchanged, and the applications and versions in the report come from real calls.
 
 The conda, PyPI, GitHub and Google Scholar statistics in the report do not depend on the log.
-They are real values from the date in the file names.
+They are real values, fetched on the date in their file names; the plots and tables of the log have the last day of the log in their file names.
 
 Recreating the output
 ---------------------
@@ -35,7 +35,7 @@ From the root of the repository:
 
 ```console
 $ mkdir -p local/report && cd local/report
-$ ../../scripts/run.sh ../../example/seqan-example.log
+$ ../../scripts/run.sh --local ../../example/seqan-example.log
 ```
 
 Creating the output in `example/` itself would add files for the current date next to the existing ones.
