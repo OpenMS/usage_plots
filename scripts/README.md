@@ -78,7 +78,7 @@ Data sources
 
 The fetched statistics cover the years from 2023 (`FIRST_YEAR` in `config/config.R` and `data_processing/py/github_shared.py`) to the current year.
 The download and contribution tables show each full year from 2023 on, the fourth quarter of the previous year to the third quarter of the current year, and the current year.
-GitHub only reports a total per release, so a release's downloads are distributed evenly over the time until the next release (or one year for the latest release).
+GitHub only reports a total per release, so a release's downloads are distributed evenly over the time until the next release of the same repository (or up to the fetch date for the latest release).
 
 GitHub token
 ------------

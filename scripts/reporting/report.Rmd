@@ -112,8 +112,8 @@ Downloads of the `r params$project` libraries and applications, fetched on `r CU
 Which GitHub repositories and conda and PyPI packages count as library or application is configured per project; other packages are not counted.
 
 * **GitHub:** Downloads of release assets, without `.sha256` files and release candidates.
-  GitHub only reports the total of each asset since its release, so the downloads of a release are distributed evenly over the days until the next release of any repository of the same kind (library or application), or over one year for the latest release, which can include months after the fetch date.
-  As the totals keep growing, the values of past periods can increase when the statistics are fetched again.
+  GitHub only reports the total of each asset since its release, so the downloads of a release are distributed evenly over the days until the next release of the same repository, or up to the fetch date for the latest release of a repository.
+  As the totals keep growing and the latest releases are distributed over more days, the values of past periods can change when the statistics are fetched again.
 * **Conda:** Monthly downloads of the packages from all channels (e.g. bioconda, conda-forge) in the public anaconda-package-data dataset.
 * **PyPI:** Monthly downloads of the packages from the public PyPI dataset on ClickHouse.
 

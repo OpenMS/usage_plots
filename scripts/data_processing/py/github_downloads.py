@@ -2,12 +2,11 @@
 
 from gql import gql, Client
 from datetime import datetime, timedelta, timezone
-from dateutil.relativedelta import relativedelta
 import pandas as pd
 from typing import List
 import re
 
-from scripts.data_processing.py.github_shared import get_gql_client, get_org_repos, ALL_MONTHS, BERLIN_TZ
+from scripts.data_processing.py.github_shared import get_gql_client, get_org_repos, ALL_MONTHS, BERLIN_TZ, CURRENT_DATE
 from scripts.config.config import PACKAGE_INFO
 
 def get_placeholder_data(no_auth: bool) -> pd.DataFrame:
@@ -76,6 +75,7 @@ def get_github_downloads(client: Client, owner: str, repos: List[str], verbose: 
                 )
 
                 all_releases.append({
+                    'repo': repo,
                     'tag_name': release['tagName'],
                     'published_at': release['publishedAt'],
                     'download_count': total_count
@@ -96,48 +96,34 @@ def get_github_downloads(client: Client, owner: str, repos: List[str], verbose: 
     if not stable_releases:
         return pd.DataFrame(get_placeholder_data(False))
 
-    # Process releases
-    release_data = []
+    # GitHub only reports the total downloads of a release. They are spread evenly over the days (Europe/Berlin)
+    # from the release to the day before the next release of the same repository. The latest release of a repository
+    # is spread up to and including the day on which the statistics are fetched, so no downloads are attributed to
+    # future months.
+    releases_by_repo = {}
     for release in stable_releases:
-        published_at = datetime.fromisoformat(release['published_at'])
+        release_day = datetime.fromisoformat(release['published_at']).astimezone(BERLIN_TZ).date()
+        releases_by_repo.setdefault(release['repo'], []).append((release_day, release['download_count']))
 
-        release_data.append({
-            'release_date': published_at,
-            'downloads': release['download_count']
-        })
-
-    # Convert to DataFrame and sort
-    df = pd.DataFrame(release_data)
-    df = df.sort_values('release_date').reset_index(drop=True)
+    periods = []  # (first day, last day, downloads)
+    for releases in releases_by_repo.values():
+        releases.sort()
+        last_days = [day - timedelta(days=1) for day, _ in releases[1:]] + [CURRENT_DATE.date()]
+        for (first_day, downloads), last_day in zip(releases, last_days):
+            # A release that is followed by another release on the same day gets this day
+            periods.append((first_day, max(first_day, last_day), downloads))
 
     # Calculate proportional downloads for each month
     monthly_downloads = []
     for month in ALL_MONTHS:
-        month_start = month.to_timestamp().tz_localize(tz=BERLIN_TZ)
-        month_end = (month + 1).to_timestamp().tz_localize(tz=BERLIN_TZ) - timedelta(days=1)
+        month_first_day = month.start_time.date()
+        month_last_day = month.end_time.date()
 
         total = 0
-        for i, row in df.iterrows():
-            release_date = row['release_date']
-            release_downloads = row['downloads']
-
-            # Get next release date or 1 year later
-            if i < len(df) - 1:
-                next_release_date = df.iloc[i + 1]['release_date']
-            else:
-                next_release_date = release_date + relativedelta(years=1)
-
-            # Calculate overlap
-            overlap_start = max(release_date, month_start)
-            overlap_end = min(next_release_date - timedelta(days=1), month_end)
-
-            if overlap_start <= overlap_end:
-                release_period_days = (next_release_date - release_date).days
-                overlap_days = (overlap_end - overlap_start).days + 1
-
-                if release_period_days > 0:
-                    proportion = overlap_days / release_period_days
-                    total += release_downloads * proportion
+        for first_day, last_day, release_downloads in periods:
+            overlap_days = (min(last_day, month_last_day) - max(first_day, month_first_day)).days + 1
+            if overlap_days > 0:
+                total += release_downloads * overlap_days / ((last_day - first_day).days + 1)
 
         monthly_downloads.append({
             'Month': str(month),
