@@ -9,11 +9,12 @@ source(file.path(script.dirname, "config", "config.R"))
 args <- commandArgs(trailingOnly = TRUE)
 
 # Validate arguments
-if (length(args) != 5) {
-  stop(paste("Usage:", script.basename, "all.log geolocations.csv report.md OUT_DIR tool_tags.tsv",
+if (!(length(args) %in% c(5, 6))) {
+  stop(paste("Usage:", script.basename, "all.log geolocations.csv report.md OUT_DIR tool_tags.tsv [ZIP_FILE]",
              "\nNote: You can obtain `all.log` and `geolocations.csv` by executing ./process_log_file.sh on the",
              "concatenated raw log file.",
-             "\n\nAll 5 arguments are required."),
+             "\n\nThe first 5 arguments are required. If ZIP_FILE is given, the report links this file in",
+             "OUT_DIR as archive of the output, otherwise the archive of Jenkins."),
        call. = FALSE)
 }
 
@@ -23,6 +24,7 @@ geo_loc_file_name <- args[2]
 report_file_name <- args[3]
 output_dir <- args[4]
 tooltag_file_name <- args[5]
+zip_file_name <- if (length(args) == 6) args[6] else ""
 
 # Convert output_dir to absolute path if needed
 if (!startsWith(output_dir, "/")) {
@@ -107,7 +109,7 @@ message("")
 message(paste("--- Rendering report:", report_file_name))
 rmarkdown::render(
   report_file_name,
-  params = list(project = project),
+  params = list(project = project, zip = zip_file_name),
   output_file = output_filename,
   output_format = "html_document"
 )

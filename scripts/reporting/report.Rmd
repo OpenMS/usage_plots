@@ -12,6 +12,7 @@ output:
       in_header: assets/favicon/favicon.html
 params:
   project: "SeqAn"
+  zip: ""
 title: "`r paste(params$project, 'Usage Statistics')`"
 ---
 
@@ -33,7 +34,7 @@ It is created automatically from the log of the `r params$project` telemetry ser
 Telemetry requires explicit consent.\
 Non-interactive sessions are opt-out by default.
 
-<abbr title="Only works for Jenkins"><a href="*zip*/`r paste(params$project, CURRENT_DATE, sep='_')`.zip" download class="btn btn-info btn-dl" target="_blank">ZIP</a></abbr>
+`r if (nzchar(params$zip)) paste0('<a href="', params$zip, '" download class="btn btn-info btn-dl" target="_blank">ZIP</a>') else paste0('<abbr title="Only works for Jenkins"><a href="*zip*/', paste(params$project, CURRENT_DATE, sep = "_"), '.zip" download class="btn btn-info btn-dl" target="_blank">ZIP</a></abbr>')`
 
 `r if (length(YEAR_VIEWS) > 0) paste0("Sections with tabs show all data and, in separate tabs, each year since ", FIRST_YEAR, "; the tab of a year only uses the calls of this year.")`
 The plots over time have a *TSV per year* with their values summed per period: each full year since `r FIRST_YEAR`, the fourth quarter of the previous year to the third quarter of the current year, and the current year.

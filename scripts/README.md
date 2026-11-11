@@ -14,6 +14,14 @@ $ /path/to/scripts/run.sh seqan-combined.log
 
 The name of the log file has to start with `seqan-` or `openms-` (lower case), which selects the project.
 
+The report has a ZIP button for an archive of the output directory.
+By default, it links the archive that Jenkins creates for a directory.
+With `--local`, `run.sh` creates the archive itself and the button links it:
+
+```console
+$ /path/to/scripts/run.sh --local seqan-combined.log
+```
+
 Output
 ------
 
@@ -27,6 +35,7 @@ All output is created in the current working directory:
 | `output_<project>/*_<date>.{pdf,png,tsv}` | Plots and tables of the report                                |
 | `output_<project>/*_<year>_<date>.{pdf,png,tsv}` | Plots and tables of one year                                  |
 | `output_<project>/*_per_year_<date>.tsv` | Values per year of the plots over time                        |
+| `output_<project>/<Project>_<date>.zip`  | With `--local`: archive of `output_<project>/` without other zips |
 
 `<date>` is the current date for the fetched statistics, the citations and the download and contribution tables,
 and the last day of the log for all plots and tables of the log.

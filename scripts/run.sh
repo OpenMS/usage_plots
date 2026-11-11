@@ -6,10 +6,38 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 REPO_DIR="$(cd "${SCRIPT_DIR}/.." &> /dev/null && pwd)"
 
+usage() {
+    echo "Usage: $(basename "$0") [--local] <concatenated_log_file>" >&2
+    echo "Example: $(basename "$0") seqan-combined.log" >&2
+    echo "" >&2
+    echo "  --local  Also create <Project>_<date>.zip of the output directory in the output directory" >&2
+    echo "           and link it in the report. Without it, the report links the archive of Jenkins." >&2
+}
+
+# Parse options
+LOCAL=false
+while [[ $# -gt 0 && "$1" == --* ]]; do
+    case "$1" in
+        --local)
+            LOCAL=true
+            shift
+            ;;
+        *)
+            echo "Error: Unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
 # Validate arguments
 if [[ $# -ne 1 ]]; then
-    echo "Usage: $(basename "$0") <concatenated_log_file>" >&2
-    echo "Example: $(basename "$0") seqan-combined.log" >&2
+    usage
+    exit 1
+fi
+
+if [[ "${LOCAL}" == true ]] && ! command -v zip &> /dev/null; then
+    echo "Error: --local requires zip" >&2
     exit 1
 fi
 
@@ -28,8 +56,10 @@ OUTPUT_DIR="${PWD}/output_${PROJECT}"
 
 # Determine tooltag file based on project
 if [[ "${PROJECT,,}" == "seqan" ]]; then
+    PROJECT_NAME="SeqAn"
     TOOLTAG_FILE="${REPO_DIR}/tooltags/seqan_tooltags.tsv"
 elif [[ "${PROJECT,,}" == "openms" ]]; then
+    PROJECT_NAME="OpenMS"
     TOOLTAG_FILE="${REPO_DIR}/tooltags/openms_tooltags.tsv"
 else
     echo "Error: Could not determine project from log file name: ${LOG_FILE}" >&2
@@ -52,6 +82,7 @@ echo "Log file: ${LOG_FILE}"
 echo "Intermediate output: ${INTERMEDIATE_OUTPUT_DIR}"
 echo "Final output: ${OUTPUT_DIR}"
 echo "Tooltag file: ${TOOLTAG_FILE}"
+echo "Local: ${LOCAL}"
 echo ""
 
 # Process log file
@@ -95,15 +126,33 @@ fi
 # Generate report
 echo ""
 echo "--- Creating report..."
+# With --local, the report links the zip that is created below
+ZIP_FILE=""
+if [[ "${LOCAL}" == true ]]; then
+    ZIP_FILE="${PROJECT_NAME}_${TIMESTAMP}.zip"
+fi
 "${SCRIPT_DIR}/create_report.R" \
     "${INTERMEDIATE_OUTPUT_DIR}/all.log" \
     "${INTERMEDIATE_OUTPUT_DIR}/geolocations.csv" \
     "${SCRIPT_DIR}/reporting/report.Rmd" \
     "${OUTPUT_DIR}" \
-    "${TOOLTAG_FILE}"
+    "${TOOLTAG_FILE}" \
+    ${ZIP_FILE:+"${ZIP_FILE}"}
 
 if [[ -f "${OUTPUT_DIR}/report.html" && ! -f "${OUTPUT_DIR}/index.html" ]]; then
     ln -s "${OUTPUT_DIR}/report.html" "${OUTPUT_DIR}/index.html"
+fi
+
+# The zip contains the output directory, without zips of earlier runs.
+# It is created outside of the output directory, so that it cannot contain itself.
+if [[ "${LOCAL}" == true ]]; then
+    echo ""
+    echo "--- Creating ${OUTPUT_DIR}/${ZIP_FILE}..."
+    ZIP_TMP_DIR="$(mktemp -d)"
+    (cd "$(dirname "${OUTPUT_DIR}")" && \
+        zip -r -q "${ZIP_TMP_DIR}/${ZIP_FILE}" "$(basename "${OUTPUT_DIR}")" -x "$(basename "${OUTPUT_DIR}")/*.zip")
+    mv -f "${ZIP_TMP_DIR}/${ZIP_FILE}" "${OUTPUT_DIR}/${ZIP_FILE}"
+    rmdir "${ZIP_TMP_DIR}"
 fi
 
 echo ""
