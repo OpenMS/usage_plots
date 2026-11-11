@@ -107,11 +107,16 @@ source(file.path(script.dirname, "plotting", "all.R"))
 # Render report
 message("")
 message(paste("--- Rendering report:", report_file_name))
+# rmarkdown writes its intermediate files (e.g. report.knit.md) next to report.Rmd by default, so reports that are
+# rendered at the same time would overwrite each other's files. Use a directory of this process instead.
+intermediates_dir <- tempfile("report_")
 rmarkdown::render(
   report_file_name,
   params = list(project = project, zip = zip_file_name),
   output_file = output_filename,
-  output_format = "html_document"
+  output_format = "html_document",
+  intermediates_dir = intermediates_dir
 )
+unlink(intermediates_dir, recursive = TRUE)
 
 message(paste("Report created successfully:", output_filename))
