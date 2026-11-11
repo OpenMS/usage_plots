@@ -35,7 +35,10 @@ The worldmap, the top 10 applications, the distribution of countries and cities,
 for all data of the log and a tab for each year from 2023 (`FIRST_YEAR` in `config/config.R`) to the current year.
 The tab of a year shows the report for a log that contains only the calls of this year; years without calls have no tab.
 The plots over time (general usage, new unique users, unique users, total calls) show all data and have a `TSV per year`
-with the same rows as the download tables (see below). There, a user counts as new in the period of their first call in the log.
+with the same rows as the download tables (see below). Its values are the sums of the rows of the plot's TSV, so an IP address
+counts in the sum of the monthly unique users once for each month in which it has a call.
+The monthly plots include the last month of the log, even if the log ends before the end of the month.
+The report describes how each number is computed.
 
 Step 2 skips a source if the file with the current date is already in `output_<project>/`.
 Running `run.sh` again on the same day therefore does not fetch the statistics again.

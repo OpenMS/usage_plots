@@ -188,7 +188,7 @@ The bar plots on the left display the unique new users. New Unique users means t
 ```{r unique_ips_bar}
 unique_ips <- new_unique_ips_per_month(VIEW_ALL)
 plot_files <- savePlots("unique_new_users_per_month_bar_", unique_ips$bar)
-period_files <- saveTable("unique_new_users_per_year_", new_unique_users_per_period(VIEW_ALL))
+period_files <- saveTable("unique_new_users_per_year_", monthly_per_period(unique_ips$bar$raw, "New_Unique_Users"))
 ```
 
 `r display_plot_with_buttons(plot_files, period_files)`
@@ -210,7 +210,7 @@ plot_files <- savePlots("unique_new_users_per_month_line_", unique_ips$line)
 ```{r unique_ips2_bar}
 unique_ips <- unique_ips_per_month(VIEW_ALL)
 plot_files <- savePlots("unique_users_per_month_bar_", unique_ips$bar)
-period_files <- saveTable("unique_users_per_year_", unique_users_per_period(VIEW_ALL))
+period_files <- saveTable("unique_users_per_year_", monthly_per_period(unique_ips$bar$raw, "Unique_Users", "Sum_of_Monthly_Unique_Users"))
 ```
 
 `r display_plot_with_buttons(plot_files, period_files)`
@@ -234,7 +234,7 @@ For comparison the following plots show the toal counts of usages (calls) per mo
 ```{r total_ips_bar}
 total_ips <- total_ips_per_month(VIEW_ALL)
 plot_files <- savePlots("total_calls_per_month_bar_", total_ips$bar)
-period_files <- saveTable("total_calls_per_year_", total_calls_per_period(VIEW_ALL))
+period_files <- saveTable("total_calls_per_year_", monthly_per_period(total_ips$bar$raw, "Total_Calls"))
 ```
 
 `r display_plot_with_buttons(plot_files, period_files)`

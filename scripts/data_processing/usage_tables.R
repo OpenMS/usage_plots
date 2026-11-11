@@ -63,29 +63,11 @@ general_usage_per_period <- function(view)
   }))
 }
 
-# IP addresses whose first call is within the period
-new_unique_users_per_period <- function(view)
+# Sums of the monthly values `column` of a monthly plot (see plotting/monthly.R) per period of
+# get_quarter_ranges(). The sums are the same as summing up the rows of the plot's TSV.
+monthly_per_period <- function(plot_data, column, name = column)
 {
-  first_calls <- view$logdata %>%
-    group_by(ip) %>%
-    summarise(date = min(date))
-
-  return(aggregate_per_period(first_calls, function(period) {
-    tibble(New_Unique_Users = nrow(period))
-  }))
-}
-
-# IP addresses with at least one call within the period
-unique_users_per_period <- function(view)
-{
-  return(aggregate_per_period(view$logdata, function(period) {
-    tibble(Unique_Users = n_distinct(period$ip))
-  }))
-}
-
-total_calls_per_period <- function(view)
-{
-  return(aggregate_per_period(view$logdata, function(period) {
-    tibble(Total_Calls = sum(period$calls))
+  return(aggregate_per_period(plot_data %>% rename(date = Month), function(period) {
+    tibble(!!name := sum(period[[column]]))
   }))
 }
