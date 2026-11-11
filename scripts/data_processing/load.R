@@ -23,30 +23,9 @@ create_view <- function(calls, label, suffix)
   ## If not DevelopedBy tag registered, assume "external" tool
   logdata[is.na(logdata[,"DevelopedBy"]),"DevelopedBy"] = "extern"
 
-  # Process cluster information
-  cluster_data <- logdata %>%
-    # Sort data
-    arrange(date, ip, app) %>%
-    # Calculate cumulative clustered values within groups
-    group_by(date, ip) %>%
-    mutate(clustered = cumsum(clustered)) %>%
-    ungroup() %>%
-    # Filter rows where clustered equals 1
-    filter(clustered == 1) %>%
-    # Count clusters by app
-    group_by(app) %>%
-    summarise(cluster_count = n()) %>%
-    # Add missing apps with zero count
-    right_join(
-      tibble(app = unique(logdata$app)),
-      by = "app"
-    ) %>%
-    # Replace NAs with zeros
-    mutate(cluster_count = replace_na(cluster_count, 0)) %>%
-    # Create named vector
-    pull(cluster_count, name = app)
-
-  # Remove clustered entries
+  # Cluster calls are only shown in the top 10, all other statistics use the remaining (individual) calls
+  cluster_calls <- logdata %>%
+    filter(clustered == 1)
   logdata <- logdata %>%
     filter(clustered == 0)
 
@@ -65,6 +44,14 @@ create_view <- function(calls, label, suffix)
     return(NULL)
   }
 
+  # Named vector of the cluster calls (or users) of each app, 0 for apps without cluster calls
+  per_app <- function(counts) {
+    counts <- counts %>%
+      right_join(tibble(app = unique(c(cluster_calls$app, logdata$app))), by = "app") %>%
+      mutate(n = replace_na(n, 0))
+    return(pull(counts, n, name = app))
+  }
+
   min_date <- min(logdata$date)
   max_date <- max(logdata$date)
 
@@ -72,7 +59,13 @@ create_view <- function(calls, label, suffix)
     label = label,
     suffix = suffix,
     logdata = logdata,
-    cluster_data = cluster_data,
+    # Number of cluster calls of each app
+    cluster_calls = per_app(cluster_calls %>% count(app)),
+    # Number of IP addresses whose calls of the app are all cluster calls
+    cluster_users = per_app(cluster_calls %>%
+                              distinct(app, ip) %>%
+                              anti_join(distinct(logdata, app, ip), by = c("app", "ip")) %>%
+                              count(app)),
     min_date = min_date,
     max_date = max_date,
     diff_time_days = as.numeric(difftime(max_date + 1, min_date, units = "days")),

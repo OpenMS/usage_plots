@@ -13,7 +13,8 @@ create_top_10_apps_plot <- function(view, data_to_plot, clustered, agg_type)
 
   if (clustered)
   {
-    plot_data$cluster_calls <- view$cluster_data[plot_data$app]
+    cluster <- if (agg_type == "users") view$cluster_users else view$cluster_calls
+    plot_data$cluster_calls <- unname(cluster[as.character(plot_data$app)])
     plot_legend <- c(paste("cluster",agg_type), paste("individual",agg_type))
     plot_colors <- c("#9ecae1", "#3182bd")
   }
