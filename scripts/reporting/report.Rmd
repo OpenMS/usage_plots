@@ -61,7 +61,7 @@ The log is processed as follows:
 * **Call:** An application counts at most once per day for each combination of IP address, version, operating system, CPU mode and `who`.
   Such a combination is a *call*; all numbers of calls in this report count these.
   Days are taken from the time stamps of the server.
-* **Cluster calls:** Within a day, the calls are sorted by IP address (as text), application and version.
+* **Cluster calls:** Within a day, the calls are sorted by IP address, application and version, compared as text byte by byte (e.g. 10.1.0.1 before 9.1.0.1).
   A call is a *cluster call* if the call directly before it is for the same application and version from an IP address in the same /16 network (same first two numbers), including the same address.
   Cluster calls are left out of all statistics; only the top 10 applications show them separately.
 * **User:** A *user* is an IP address.

@@ -2,6 +2,10 @@
 
 set -Eeuo pipefail
 
+# The cluster calls are marked by comparing each line with the line before it, so the order of the lines must not
+# depend on the locale of the caller: sort and uniq compare bytes.
+export LC_ALL=C
+
 # Get the full path to this bash script.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 

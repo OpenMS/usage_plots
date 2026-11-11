@@ -113,6 +113,7 @@ For example, `/check/SeqAn3_Linux_64_needle_1.0.3` has `SeqAn3` as `who`, `Linux
 * Lines containing a term from `EXCLUDED_TERMS` (e.g., `test_version_check`) and lines that do not match this format (e.g., without an `x.y.z` version) are dropped.
 * Identical rows are merged: an app counts once per day for each combination of IP address, version, CPU mode, OS and `who`.
 * `clustered` is set if the previous row has the same date, app, version and the same first two octets of the IP address.
+  The rows are sorted as bytes (`LC_ALL=C`), so the result does not depend on the locale.
   `data_processing/load.R` removes these rows from the statistics and reports them as cluster calls in the top 10 plots.
   The cluster users of an app are the IP addresses whose calls of the app are all cluster calls.
 * OS names are normalized; `unknown` counts as `Linux`.
