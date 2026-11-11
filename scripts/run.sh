@@ -7,19 +7,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 REPO_DIR="$(cd "${SCRIPT_DIR}/.." &> /dev/null && pwd)"
 
 usage() {
-    echo "Usage: $(basename "$0") [--local] <concatenated_log_file>" >&2
+    echo "Usage: $(basename "$0") [--local] [--force] <concatenated_log_file>" >&2
     echo "Example: $(basename "$0") seqan-combined.log" >&2
     echo "" >&2
     echo "  --local  Also create <Project>_<date>.zip of the output directory in the output directory" >&2
     echo "           and link it in the report. Without it, the report links the archive of Jenkins." >&2
+    echo "  --force  Fetch the statistics even if they were already fetched today." >&2
 }
 
 # Parse options
 LOCAL=false
+FORCE=false
 while [[ $# -gt 0 && "$1" == --* ]]; do
     case "$1" in
         --local)
             LOCAL=true
+            shift
+            ;;
+        --force)
+            FORCE=true
             shift
             ;;
         *)
@@ -83,6 +89,7 @@ echo "Intermediate output: ${INTERMEDIATE_OUTPUT_DIR}"
 echo "Final output: ${OUTPUT_DIR}"
 echo "Tooltag file: ${TOOLTAG_FILE}"
 echo "Local: ${LOCAL}"
+echo "Force: ${FORCE}"
 echo ""
 
 # Process log file
@@ -102,21 +109,22 @@ echo "--- Gathering statistics..."
 mkdir -p "${OUTPUT_DIR}"
 TIMESTAMP=$(date +"%F")
 
-if [[ ! -f "${OUTPUT_DIR}/monthly_conda_downloads_${TIMESTAMP}.tsv" ]]; then
+# Statistics that were already fetched today are reused, unless --force is given
+if [[ "${FORCE}" == true || ! -f "${OUTPUT_DIR}/monthly_conda_downloads_${TIMESTAMP}.tsv" ]]; then
     echo "  Conda..."
     "${SCRIPT_DIR}/data_processing/conda_stats.py" --project "${PROJECT}" --output "${OUTPUT_DIR}"
 else
     echo "Skipping gathering conda stats."
 fi
 
-if [[ ! -f "${OUTPUT_DIR}/monthly_github_contributions_${TIMESTAMP}.tsv" ]] || [[ ! -f "${OUTPUT_DIR}/monthly_github_downloads_${TIMESTAMP}.tsv" ]]; then
+if [[ "${FORCE}" == true || ! -f "${OUTPUT_DIR}/monthly_github_contributions_${TIMESTAMP}.tsv" || ! -f "${OUTPUT_DIR}/monthly_github_downloads_${TIMESTAMP}.tsv" ]]; then
     echo "  GitHub..."
     "${SCRIPT_DIR}/data_processing/github_stats.py" --project "${PROJECT}" --output "${OUTPUT_DIR}"
 else
     echo "Skipping gathering GitHub stats."
 fi
 
-if [[ ! -f "${OUTPUT_DIR}/monthly_pypi_downloads_${TIMESTAMP}.tsv" ]]; then
+if [[ "${FORCE}" == true || ! -f "${OUTPUT_DIR}/monthly_pypi_downloads_${TIMESTAMP}.tsv" ]]; then
     echo "  PyPI..."
     "${SCRIPT_DIR}/data_processing/pypi_stats.py" --project "${PROJECT}" --output "${OUTPUT_DIR}"
 else

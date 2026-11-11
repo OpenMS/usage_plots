@@ -53,7 +53,7 @@ The monthly plots include the last month of the log, even if the log ends before
 The report describes how each number is computed.
 
 Step 2 skips a source if the file with the current date is already in `output_<project>/`.
-Running `run.sh` again on the same day therefore does not fetch the statistics again.
+Running `run.sh` again on the same day therefore does not fetch the statistics again, unless `--force` is given.
 
 Configuration
 -------------
@@ -103,7 +103,7 @@ Without the token, GitHub statistics are not collected, because the rate limit f
 These placeholders show up in the report as negative numbers: each GitHub column shows `-12` for each period, and `Total_Downloads` is reduced by 12.
 
 The placeholder files count as existing statistics for the current date.
-To collect GitHub statistics after a run without a token, delete `output_<project>/monthly_github_*` first.
+To collect GitHub statistics after a run without a token, run `run.sh --force` or delete `output_<project>/monthly_github_*` first.
 
 Log processing
 --------------
