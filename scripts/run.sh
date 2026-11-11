@@ -147,10 +147,6 @@ fi
     "${TOOLTAG_FILE}" \
     ${ZIP_FILE:+"${ZIP_FILE}"}
 
-if [[ -f "${OUTPUT_DIR}/report.html" && ! -f "${OUTPUT_DIR}/index.html" ]]; then
-    ln -s "${OUTPUT_DIR}/report.html" "${OUTPUT_DIR}/index.html"
-fi
-
 # The zip contains the output directory, without zips of earlier runs.
 # It is created outside of the output directory, so that it cannot contain itself.
 if [[ "${LOCAL}" == true ]]; then

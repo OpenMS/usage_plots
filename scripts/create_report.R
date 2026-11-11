@@ -34,7 +34,8 @@ if (!startsWith(output_dir, "/")) {
 # Create output directory
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
-output_filename <- file.path(output_dir, "report.html")
+report_basename <- paste0("report_", CURRENT_DATE, ".html")
+output_filename <- file.path(output_dir, report_basename)
 
 if (file.exists(output_filename)) {
   message(paste("Overwriting output file", output_filename))
@@ -120,3 +121,20 @@ rmarkdown::render(
 unlink(intermediates_dir, recursive = TRUE)
 
 message(paste("Report created successfully:", output_filename))
+
+# index.html forwards to the report. It is a file, not a symlink, so that it survives copying with e.g. scp.
+index_filename <- file.path(output_dir, "index.html")
+writeLines(c(
+  '<!DOCTYPE html>',
+  '<html lang="en">',
+  '<head>',
+  '<meta charset="utf-8"/>',
+  '<meta name="robots" content="noindex, nofollow"/>',
+  paste0('<meta http-equiv="refresh" content="0; url=', report_basename, '"/>'),
+  paste0('<title>', project, ' Usage Statistics</title>'),
+  '</head>',
+  '<body>',
+  paste0('<p><a href="', report_basename, '">', project, ' Usage Statistics</a></p>'),
+  '</body>',
+  '</html>'
+), index_filename)

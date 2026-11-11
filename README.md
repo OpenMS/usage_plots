@@ -42,7 +42,7 @@ Creating a dashboard
    $ mkdir -p local/report && cd local/report # `local` is ignored by git
    $ ../../scripts/run.sh ../../example/seqan-example.log
    ```
-   `output_seqan/report.html` is the dashboard.
+   `output_seqan/index.html` opens the dashboard, `output_seqan/report_<date>.html`.
 
 [example/output_seqan/](example/output_seqan/) contains the result of these commands.
 

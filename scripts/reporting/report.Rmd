@@ -9,7 +9,7 @@ output:
     css: assets/report.css
     self_contained: true
     includes:
-      in_header: assets/favicon/favicon.html
+      in_header: [assets/favicon/favicon.html, assets/noindex.html]
 params:
   project: "SeqAn"
   zip: ""

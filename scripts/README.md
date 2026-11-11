@@ -30,17 +30,21 @@ All output is created in the current working directory:
 | Path                                     | Content                                                        |
 |------------------------------------------|----------------------------------------------------------------|
 | `intermediate_output_<project>/`         | `all.log`, `ips.txt` and `geolocations.csv` from step 1        |
-| `output_<project>/report.html`           | The dashboard                                                  |
+| `output_<project>/report_<date>.html`    | The dashboard                                                  |
+| `output_<project>/index.html`            | Forwards to the latest dashboard                               |
 | `output_<project>/monthly_*_<date>.tsv`  | Statistics fetched in step 2                                   |
 | `output_<project>/*_<date>.{pdf,png,tsv}` | Plots and tables of the report                                |
 | `output_<project>/*_<year>_<date>.{pdf,png,tsv}` | Plots and tables of one year                                  |
 | `output_<project>/*_per_year_<date>.tsv` | Values per year of the plots over time                        |
 | `output_<project>/<Project>_<date>.zip`  | With `--local`: archive of `output_<project>/` without other zips |
 
-`<date>` is the current date for the fetched statistics, the citations and the download and contribution tables,
+`<date>` is the current date for the report, the fetched statistics, the citations and the download and contribution tables,
 and the last day of the log for all plots and tables of the log.
 
-Keep the files in `output_<project>/` together: `report.html` embeds the plots, but its download buttons link to the individual files.
+Keep the files in `output_<project>/` together: the report embeds the plots, but its download buttons link to the individual files.
+`index.html` is a file that forwards to the report (not a symlink), so it survives copying, e.g. with `scp`.
+The report and `index.html` have a robots meta tag (`noindex, nofollow`) against indexing by search engines.
+Other files (PNG, PDF, TSV, zip) cannot have one; the web server has to send an `X-Robots-Tag` header for them.
 Viewing the report requires an internet connection for the table library and the map tiles.
 
 The worldmap, the top 10 applications, the distribution of countries and cities, and the daily and weekly usage have a tab
