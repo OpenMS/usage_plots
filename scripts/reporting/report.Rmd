@@ -27,13 +27,21 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center")
 ```
 
-This is an automatically generated report that evaluates the current `r params$project` user statistics. The data is taken from the file `log_file_name` preprocessed by a script `global.R`.
+This report shows how `r params$project` applications are used.
+It is created automatically from the log of the `r params$project` telemetry server and from public download, GitHub and Google Scholar statistics.
+
+Telemetry requires explicit consent.\
+Non-interactive sessions are opt-out by default.
 
 <abbr title="Only works for Jenkins"><a href="*zip*/`r paste(params$project, CURRENT_DATE, sep='_')`.zip" download class="btn btn-info btn-dl" target="_blank">ZIP</a></abbr>
 
-`r if (length(YEAR_VIEWS) > 0) paste0("Sections with tabs show all data and, in a separate tab, each year since ", FIRST_YEAR, ". The plots over time have an additional TSV with the values per year.")`
+`r if (length(YEAR_VIEWS) > 0) paste0("Sections with tabs show all data and, in separate tabs, each year since ", FIRST_YEAR, "; the tab of a year only uses the calls of this year.")`
+The plots over time have a *TSV per year* with their values summed per period: each full year since `r FIRST_YEAR`, the fourth quarter of the previous year to the third quarter of the current year, and the current year.
 
 ## Timeframe
+
+The first and the last day with a call in the log, and the day on which the report was created.
+If the log ends before the end of a month, the values of this month cover only part of it.
 
 | What  | Date             |
 |------:|:----------------:|
@@ -46,26 +54,43 @@ This is equivalent to `r scales::comma(VIEW_ALL$diff_time_days)` days or `r form
 
 ## The Data
 
-The collected information contains the following columns:
+A telemetry request is a line of the server log that requests `/check/<who>_<os>_<cpu>_<app>_<version>` from an IPv4 address, for example `/check/SeqAn3_Linux_64_needle_1.0.3`.
+The log is processed as follows:
+
+* **Excluded:** Requests that do not match this format, e.g. without a version of the form x.y.z, and requests of test programs (`test_version_check`, `program_full_options`, `empty_options`, `default`, `myApp`, `test_parser`).
+* **Call:** An application counts at most once per day for each combination of IP address, version, operating system, CPU mode and `who`.
+  Such a combination is a *call*; all numbers of calls in this report count these.
+  Days are taken from the time stamps of the server.
+* **Cluster calls:** Within a day, the calls are sorted by IP address (as text), application and version.
+  A call is a *cluster call* if the call directly before it is for the same application and version from an IP address in the same /16 network (same first two numbers), including the same address.
+  Cluster calls are left out of all statistics; only the top 10 applications show them separately.
+* **User:** A *user* is an IP address.
+  Several people can share an address, for example behind the gateway of an institute, and one person can use several addresses, so the number of IP addresses only approximates the number of people.
+* **Location:** Country, region, city and coordinates of an IP address are taken from the IP2Location LITE DB5 database and are approximate.
+  Addresses that are not in the database have the country `-` and the coordinates 0, 0.
+* **Operating system:** `unknown` counts as Linux.
+* **Tool tag:** Each application has the tag of the project's tool tag list, e.g. de.NBI; applications that are not in the list are tagged `extern`.
+
+The resulting table has the following columns:
 
 | ID | Name         | Description                                  |
 |----|--------------|----------------------------------------------|
 | 1  | app          | Application name                             |
 | 2  | ip           | IP address                                   |
-| 3  | calls        | Number of calls                              |
+| 3  | calls        | Always 1: each row is one call               |
 | 4  | date         | Date of the call                             |
 | 5  | version      | Application version                          |
 | 6  | cpu          | CPU-Mode (32/64-bit)                         |
 | 7  | os           | The operating system                         |
 | 8  | who          | How the call was sent (e.g., library, KNIME) |
-| 9  | clustered    | Call originates from known cluster           |
+| 9  | clustered    | 1 for a cluster call                         |
 | 10 | country_code | Country code¹                                |
 | 11 | country      | Country¹                                     |
 | 12 | region       | Region¹                                      |
 | 13 | city         | City¹                                        |
 | 14 | longitude    | Longitude¹                                   |
-| 15 | latitude     | Latidude¹                                    |
-| 16 | DevelopedBy  | Tooltag (de.NBI, extern)                     |
+| 15 | latitude     | Latitude¹                                    |
+| 16 | DevelopedBy  | Tool tag                                     |
 
 <p style="margin-top: -20px">¹ <small>Derived from IP</small></p>
 
@@ -77,11 +102,22 @@ citations <- plot_citations(scholar_id)
 plot_files <- savePlots("scholar_citations_", citations, stamp = CURRENT_DATE)
 ```
 
-The number of citations of a set of important [selected publications](https://scholar.google.de/citations?hl=de&user=`r scholar_id`) about or using `r params$project`:
+Citations per year of a set of important [selected publications](https://scholar.google.de/citations?hl=de&user=`r scholar_id`) about or using `r params$project`, as reported by Google Scholar at the time shown in the plot:
 
 `r display_plot_with_buttons(plot_files)`
 
 ## Downloads {.tabset}
+
+Downloads of the `r params$project` libraries and applications, fetched on `r CURRENT_DATE`.
+Which GitHub repositories and conda and PyPI packages count as library or application is configured per project; other packages are not counted.
+
+* **GitHub:** Downloads of release assets, without `.sha256` files and release candidates.
+  GitHub only reports the total of each asset since its release, so the downloads of a release are distributed evenly over the days until the next release of any repository of the same kind (library or application), or over one year for the latest release, which can include months after the fetch date.
+  As the totals keep growing, the values of past periods can increase when the statistics are fetched again.
+* **Conda:** Monthly downloads of the packages from all channels (e.g. bioconda, conda-forge) in the public anaconda-package-data dataset.
+* **PyPI:** Monthly downloads of the packages from the public PyPI dataset on ClickHouse.
+
+The periods are each full year since `r FIRST_YEAR`, the fourth quarter of the previous year to the third quarter of the current year, and the current year.
 
 ### Libraries
 
@@ -104,6 +140,10 @@ table_files <- saveTable("downloads_apps_", download_stats$apps, stamp = CURRENT
 
 ## GitHub Issues and PR
 
+Issues and pull requests of all repositories of the `r params$project` GitHub organization, fetched on `r CURRENT_DATE`.
+Each is counted in the period in which it was opened and in the period in which it was closed (Europe/Berlin time); merged pull requests count as closed.
+The periods are the same as for the downloads.
+
 ```{r githubpr}
 github <- get_aggregated_contributions()
 table_files <- saveTable("github_contributions_", github, stamp = CURRENT_DATE)
@@ -113,7 +153,8 @@ table_files <- saveTable("github_contributions_", github, stamp = CURRENT_DATE)
 
 ## General Usage
 
-To display the general usage, the plot shows the cumulative usage of all application summed together over the given time period.
+Cumulative number of calls of all applications over time, by tool tag.
+TSV per year: the calls in each period, by tool tag.
 
 ```{r general_usage}
 general_usage_plot <- general_usage(VIEW_ALL, params$project)
@@ -124,6 +165,12 @@ period_files <- saveTable("total_sum_of_usages_per_year_", general_usage_per_per
 `r display_plot_with_buttons(plot_files, period_files)`
 
 ## Worldmap {.tabset}
+
+`r params$project` Worldmap: Program calls with telemetry enabled (blue circles = call frequency)
+
+Each circle is a location from the geolocation of the IP addresses; its radius grows logarithmically with the number of calls from there.
+Click a circle to see the calls per application.
+All maps start at, and reset to, the area of all data, and switching tabs keeps the current view.
 
 ```{r world_map, results = "asis"}
 # The map is an htmlwidget; knitting it as a child document includes its dependencies.
@@ -139,7 +186,12 @@ cat(worldmap_sync_script(), "\n\n")
 
 ## Top 10 Applications {.tabset}
 
-In the following the data was aggregated by application. The first figure pictures the sum of all calls of each application, while the second shows the number of unique users. The figures differentiate between individual and cluster calls/users. The term 'cluster calls/users' refers to IP addresses that were previously identified as part of a cluster, but left in the dataset as a representative for the corresponding cluster.
+The ten applications with the most individual calls (By Calls) or individual users (By Users) in the timeframe of the tab.
+
+* **Individual calls and users:** The calls that are not cluster calls, and their IP addresses.
+* **Cluster calls:** The calls of the application that are left out as cluster calls (see [The Data](#the-data)).
+* **Cluster users:** IP addresses whose calls of the application are all cluster calls.
+  Individual and cluster users together are all IP addresses with a call of the application.
 
 ```{r top_10, results = "asis"}
 for (view in VIEWS) {
@@ -157,7 +209,8 @@ for (view in VIEWS) {
 
 ## Operating System {.tabset}
 
-For an overview over the distribution of different operating systems the data was aggregated by column 'os'. As before, the first figure pictures the sum of all calls of each operating system, while the second shows the number of unique users.
+Share of the calls (By Calls) and of the IP addresses (By Users) per operating system.
+An IP address with calls from several operating systems counts for each of them.
 
 ### By Calls
 
@@ -181,7 +234,10 @@ plot_files <- savePlots("operating_system_distribution_by_users_", operating_sys
 
 ## New Unique User Statistic {.tabset}
 
-The bar plots on the left display the unique new users. New Unique users means that each IP Adress tracked only appears once in this statistic at the time point of it's first occurence. The line plot on the right displays the same information as a line instead of bars. The red line on the left plot shows the cumulative sum of the new unique users.
+A *new unique user* is an IP address in the month of its first call in the log.
+Each IP address counts once in the whole log (since `r VIEW_ALL$min_date`); in the first months of the log, this includes addresses that were already in use before.
+The red line is the cumulative sum, i.e. the number of distinct IP addresses up to the month.
+TSV per year: the monthly values summed per period, i.e. the IP addresses whose first call in the log is in the period.
 
 ### Bar
 
@@ -205,6 +261,11 @@ plot_files <- savePlots("unique_new_users_per_month_line_", unique_ips$line)
 
 ## Unique User Statistic {.tabset}
 
+The number of distinct IP addresses with a call in the month.
+An IP address counts once per month, in each month in which it has a call.
+The red line is the cumulative sum of the monthly values; as an IP address counts again in each month, this is not the number of distinct IP addresses.
+TSV per year: the monthly values summed per period (Sum_of_Monthly_Unique_Users), with the same caveat.
+
 ### Bar
 
 ```{r unique_ips2_bar}
@@ -227,7 +288,8 @@ plot_files <- savePlots("unique_users_per_month_line_", unique_ips$line)
 
 ## Total Calls Statistic {.tabset}
 
-For comparison the following plots show the toal counts of usages (calls) per month, accumulated and as a line plot.
+The number of calls per month (see [The Data](#the-data)); the red line is the cumulative sum.
+TSV per year: the monthly values summed per period.
 
 ### Bar
 
@@ -251,6 +313,9 @@ plot_files <- savePlots("total_calls_per_month_line_", total_ips$line)
 
 ## Distribution of Countries and Cities {.tabset}
 
+For each application, the number of countries and cities with a call, and the country and the city with the most calls.
+Cities are distinguished by name only.
+
 ```{r contries_and_cities, results = "asis"}
 for (view in VIEWS) {
   cat(tab_heading(view))
@@ -263,7 +328,7 @@ for (view in VIEWS) {
 
 ## Daily and Weekly Usage {.tabset}
 
-The averages per day and week are based on the timeframe of each tab: all data, or the calls of the year.
+The calls of each application divided by the number of days and weeks of the timeframe: from the first to the last day with a call in the log (All data) or in the year.
 
 ```{r daily_and_weekly_usage, results = "asis"}
 for (view in VIEWS) {
