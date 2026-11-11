@@ -36,9 +36,10 @@ tab_heading <- function(view, tabset = FALSE)
   return(paste0("### ", view$label, if (tabset) " {.tabset}" else "", "\n\n"))
 }
 
-saveTable <- function(name, table)
+# `stamp` is the date in the file name, see savePlots().
+saveTable <- function(name, table, stamp = LOG_DATE)
 {
-    table_basename_tsv <- paste0(name, CURRENT_DATE, ".tsv")
+    table_basename_tsv <- paste0(name, stamp, ".tsv")
     table_output_tsv <- paste(output_dir, table_basename_tsv, sep = "/")
     write.table(table, sep = "\t", file = table_output_tsv, row.names = FALSE)
     result <- list(data = table,

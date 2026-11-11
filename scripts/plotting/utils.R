@@ -10,11 +10,13 @@ common_theme <- theme_gray(base_size=16, base_family="Helvetica") +
         legend.key.spacing.y = unit(3, "points"),
         aspect.ratio = 9/16)
 
-savePlots <- function(name, plot_data)
+# `stamp` is the date in the file names: the last day of the log for plots of the log,
+# the current date for plots of statistics that are fetched when the report is created.
+savePlots <- function(name, plot_data, stamp = LOG_DATE)
 {
-    plot_basename_pdf <- paste(name, CURRENT_DATE, ".pdf", sep = "")
-    plot_basename_png <- paste(name, CURRENT_DATE, ".png", sep = "")
-    plot_basename_tsv <- paste(name, CURRENT_DATE, ".tsv", sep = "")
+    plot_basename_pdf <- paste(name, stamp, ".pdf", sep = "")
+    plot_basename_png <- paste(name, stamp, ".png", sep = "")
+    plot_basename_tsv <- paste(name, stamp, ".tsv", sep = "")
 
     plot_output_pdf <- paste(output_dir, plot_basename_pdf, sep = "/")
     plot_output_png <- paste(output_dir, plot_basename_png, sep = "/")

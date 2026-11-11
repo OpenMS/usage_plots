@@ -198,7 +198,7 @@ display_worldmap_buttons <- function(view)
       });
       setTimeout(() => {
         map.printPlugin.printMap('CurrentSize', ')"
-  # paste0("worldmap_", view$suffix, CURRENT_DATE, "_1920x1080")
+  # paste0("worldmap_", view$suffix, LOG_DATE, "_1920x1080")
   button_script_part2 <- r"(');
       }, 1500);
     });
@@ -207,7 +207,7 @@ display_worldmap_buttons <- function(view)
     const $divMap = $('#leaflet-worldmap@ID@');
     const map = $divMap[0].htmlwidget_data_init_result.getMap();
     map.printPlugin.printMap('CurrentSize', ')"
-  # paste0("worldmap_", view$suffix, CURRENT_DATE, "_960x540")
+  # paste0("worldmap_", view$suffix, LOG_DATE, "_960x540")
   button_script_part3 <- r"(');
   });
   $('#btn_reset@ID@').click(function (e){
@@ -219,9 +219,9 @@ display_worldmap_buttons <- function(view)
   )"
 
   button_script <- paste0(button_script_part1,
-                          paste0("worldmap_", view$suffix, CURRENT_DATE, "_1920x1080"),
+                          paste0("worldmap_", view$suffix, LOG_DATE, "_1920x1080"),
                           button_script_part2,
-                          paste0("worldmap_", view$suffix, CURRENT_DATE, "_960x540"),
+                          paste0("worldmap_", view$suffix, LOG_DATE, "_960x540"),
                           button_script_part3)
 
   id_suffix <- worldmap_id_suffix(view)

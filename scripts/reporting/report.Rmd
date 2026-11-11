@@ -74,7 +74,7 @@ The collected information contains the following columns:
 ```{r citations}
 scholar_id <- if(params$project == "OpenMS") "tQ26gxIAAAAJ" else "JWLBQHwAAAAJ"
 citations <- plot_citations(scholar_id)
-plot_files <- savePlots("scholar_citations", citations)
+plot_files <- savePlots("scholar_citations_", citations, stamp = CURRENT_DATE)
 ```
 
 The number of citations of a set of important [selected publications](https://scholar.google.de/citations?hl=de&user=`r scholar_id`) about or using `r params$project`:
@@ -87,7 +87,7 @@ The number of citations of a set of important [selected publications](https://sc
 
 ```{r downloads_libs}
 download_stats <- get_aggregated_downloads()
-table_files <- saveTable("downloads_libs_", download_stats$libraries)
+table_files <- saveTable("downloads_libs_", download_stats$libraries, stamp = CURRENT_DATE)
 ```
 
 `r display_table_with_buttons(table_files)`
@@ -95,7 +95,7 @@ table_files <- saveTable("downloads_libs_", download_stats$libraries)
 ### Apps
 
 ```{r downloads_apps}
-table_files <- saveTable("downloads_apps_", download_stats$apps)
+table_files <- saveTable("downloads_apps_", download_stats$apps, stamp = CURRENT_DATE)
 ```
 
 `r display_table_with_buttons(table_files)`
@@ -106,7 +106,7 @@ table_files <- saveTable("downloads_apps_", download_stats$apps)
 
 ```{r githubpr}
 github <- get_aggregated_contributions()
-table_files <- saveTable("github_contributions_", github)
+table_files <- saveTable("github_contributions_", github, stamp = CURRENT_DATE)
 ```
 
 `r display_table_with_buttons(table_files)`

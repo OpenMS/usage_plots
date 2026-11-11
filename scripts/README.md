@@ -28,6 +28,9 @@ All output is created in the current working directory:
 | `output_<project>/*_<year>_<date>.{pdf,png,tsv}` | Plots and tables of one year                                  |
 | `output_<project>/*_per_year_<date>.tsv` | Values per year of the plots over time                        |
 
+`<date>` is the current date for the fetched statistics, the citations and the download and contribution tables,
+and the last day of the log for all plots and tables of the log.
+
 Keep the files in `output_<project>/` together: `report.html` embeds the plots, but its download buttons link to the individual files.
 Viewing the report requires an internet connection for the table library and the map tiles.
 

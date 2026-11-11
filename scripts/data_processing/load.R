@@ -79,6 +79,9 @@ if (is.null(VIEW_ALL)) {
   stop("The log does not contain any calls.", call. = FALSE)
 }
 
+# Date in the file names of the plots and tables of the log
+LOG_DATE <- VIEW_ALL$max_date
+
 # One view per year; calls from other years are not considered at all. Years without calls are skipped.
 log_years <- as.integer(format(as.Date(log_data_new$date, format = "%Y-%b-%d"), "%Y"))
 YEAR_VIEWS <- lapply(REPORT_YEARS, function(year) {
