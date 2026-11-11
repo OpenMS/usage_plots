@@ -63,8 +63,6 @@ new_unique_ips_per_month <- function(view) {
     # Fill Missing Months
     mutate(Month = as.Date(paste0(Month, "-01"))) %>%
     complete(Month = seq(first(Month), last(Month), by = "month"), fill=list(New_Unique_Users=0)) %>%
-    # Remove the last month
-    slice(-n()) %>%
     # Add cumulative sum
     mutate(Cumulative_Users = cumsum(New_Unique_Users))
 
@@ -92,8 +90,6 @@ unique_ips_per_month <- function(view) {
     # Fill Missing Months
     mutate(Month = as.Date(paste0(Month, "-01"))) %>%
     complete(Month = seq(first(Month), last(Month), by = "month"), fill=list(Unique_Users=0)) %>%
-    # Remove the last month
-    slice(-n()) %>%
     # Add cumulative sum
     mutate(Cumulative_Users = cumsum(Unique_Users))
 
@@ -118,8 +114,6 @@ total_ips_per_month <- function(view) {
     # Fill Missing Months
     mutate(Month = as.Date(paste0(Month, "-01"))) %>%
     complete(Month = seq(first(Month), last(Month), by = "month"), fill=list(Total_Calls=0)) %>%
-    # Remove last month
-    slice(-n()) %>%
     # Add cumulative sum
     mutate(Cumulative_Calls = cumsum(Total_Calls))
 
